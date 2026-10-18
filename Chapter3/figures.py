@@ -59,7 +59,7 @@ def plan3d(r,out,name):
     for b in r['boxes']:
         ax.add_collection3d(Poly3DCollection(faces(b),facecolors=(.13,.49,.54,.025),edgecolors=(.13,.49,.54,.45),linewidths=.5))
     ax.plot(*r['raw'].T,color='.5',lw=.9)
-    ax.plot(*r['spline'].T,color=WARM,ls='--',lw=1.6)
+    ax.plot(*r['initial_X'][:,:3].T,color=WARM,ls='--',lw=1.6)
     ax.plot(*r['X'][:,:3].T,color=BLUE,lw=2.5)
     ax.scatter(*r['X'][0,:3],c=BLUE,s=35);ax.scatter(*r['X'][-1,:3],c=BLUE,marker='*',s=80)
     ax.set(xlim=(-20,640),ylim=(-220,220),zlim=(60,185),xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',zlabel='高度 $z$ / m')
@@ -107,8 +107,8 @@ def plot_all(results,out):
         fig.subplots_adjust(right=.72);finish(fig,out,'corridor_top')
         X,U,t=r['X'],r['U'],r['time'];fig,axes=plt.subplots(3,2,figsize=(10,8),sharex=True)
         q=[X[:,3],X[:,4]*180/np.pi,X[:,6]*180/np.pi,U[:,0],U[:,1]*180/np.pi,U[:,2]*180/np.pi]
-        labels=[r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'升力倾侧角 $\mu$ / °',r'推力 $T$ / N',r'迎角 $\alpha$ / °',r'倾侧角变化率 $\omega_\mu$ / (°/s)']
-        bounds=[(15,25),(-.3*180/np.pi,.3*180/np.pi),(-.6*180/np.pi,.6*180/np.pi),(0,40),(-.03*180/np.pi,.18*180/np.pi),(-.4*180/np.pi,.4*180/np.pi)]
+        labels=[r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'倾侧角 $\phi$ / °',r'速率变化率 $a$ / (m/s$^2$)',r'航迹倾角变化率 $\omega_\gamma$ / (°/s)',r'倾侧角变化率 $\omega_\phi$ / (°/s)']
+        bounds=[(15,25),(-.2*180/np.pi,.2*180/np.pi),(-.6*180/np.pi,.6*180/np.pi),(-2,2),(-.08*180/np.pi,.08*180/np.pi),(-.4*180/np.pi,.4*180/np.pi)]
         for i,(a,y,l,bd) in enumerate(zip(axes.flat,q,labels,bounds)):
             if i<3:a.plot(t,y,color=BLUE,lw=1.8)
             else:a.step(t[:-1],y,where='post',color=BLUE,lw=1.8)

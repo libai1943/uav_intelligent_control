@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import numpy as np
 import matplotlib.pyplot as plt
-from model import trim,motion
+from model import motion
 from figures import style,finish,BLUE,WARM,GRAY
 
 def function(x):
@@ -13,20 +13,20 @@ def derivative(x):
     return 1/np.cosh(x)**2+.2*(1-.2*x*x)*np.exp(-.1*x*x)+.75*np.cos(2.5*x)
 
 def make_examples(out):
-    style();out=Path(out);tables=out/'tables'
-    tables.mkdir(parents=True,exist_ok=True)
-    T0,a0=trim();dt=.001;x=np.array([0,0,100,20,0,0,0.],float)
-    tt=np.arange(2001)*dt;xx=[x.copy()]
-    uu=np.c_[T0+.8*tt,a0+.002*tt,.01*tt]
+    style();out=Path(out);tables=out/'tables';tables.mkdir(parents=True,exist_ok=True)
+    book=out.parent.parent/'chapter3_figures'
+    dt=.01;x=np.array([0,0,100,20,0,0,0.],float)
+    tt=np.arange(201)*dt;xx=[x.copy()]
+    uu=np.c_[.4*tt,.015*tt,.02*tt]
     for u in uu[:-1]:
         x=x+dt*motion(x,u);xx.append(x.copy())
     xx=np.array(xx)
-    assert np.max(np.abs(xx[:,6]-.005*tt**2))<1.1e-5
+    assert np.max(np.abs(xx[:,6]-.01*(tt**2-dt*tt)))<1e-12
     np.savetxt(out/'forward_example.csv',np.c_[tt,uu,xx],delimiter=',',
-               header='t,T,alpha,omega_mu,x,y,z,V,gamma,chi,mu',comments='')
+               header='t,a,omega_gamma,omega_phi,x,y,z,V,gamma,chi,phi',comments='')
     fig,axes=plt.subplots(2,3,figsize=(10,5.3),sharex=True)
-    labels=[r'推力 $T$ / N',r'迎角 $\alpha$ / °',r'倾侧角变化率 $\omega_\mu$ / (°/s)',
-            r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'倾侧角 $\mu$ / °']
+    labels=[r'速率变化率 $a$ / (m/s$^2$)',r'航迹倾角变化率 $\omega_\gamma$ / (°/s)',r'倾侧角变化率 $\omega_\phi$ / (°/s)',
+            r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'倾侧角 $\phi$ / °']
     values=[uu[:,0],np.rad2deg(uu[:,1]),np.rad2deg(uu[:,2]),xx[:,3],np.rad2deg(xx[:,4]),np.rad2deg(xx[:,6])]
     for ax,y,label in zip(axes.flat,values,labels):
         ax.plot(tt,y,color=BLUE,lw=1.8);ax.set_ylabel(label);ax.grid(alpha=.15)
@@ -34,11 +34,12 @@ def make_examples(out):
     fig.tight_layout();finish(fig,out,'forward_example')
     tex=[r'\begin{table}[!htbp]\centering\small',r'\caption{时变输入前向模拟的部分结果（长度单位：米；角度单位：度）}\label{tab:fwforward}',
          r'\begin{tabularx}{\textwidth}{|Y|Y|Y|Y|Y|Y|}\hline\hline',
-         r'\tablehead\textbf{时刻 $t$/s}&\textbf{位置 $x$}&\textbf{位置 $y$}&\textbf{高度 $z$}&\textbf{方位角 $\chi$}&\textbf{倾侧角 $\mu$}\\\hline']
+         r'\tablehead\textbf{时刻 $t$/s}&\textbf{位置 $x$}&\textbf{位置 $y$}&\textbf{高度 $z$}&\textbf{方位角 $\chi$}&\textbf{倾侧角 $\phi$}\\\hline']
     for t in [0,.5,1,1.5,2]:
         z=xx[round(t/dt)];tex.append(f'{t:.1f}&{z[0]:.3f}&{z[1]:.3f}&{z[2]:.3f}&{np.rad2deg(z[5]):.3f}&{np.rad2deg(z[6]):.3f}'+r'\\\hline')
     tex[-1]=tex[-1].replace(r'\hline',r'\lastline');tex +=[r'\end{tabularx}\end{table}']
     (tables/'forward_table.tex').write_text('\n'.join(tex),encoding='utf-8')
+    if book.is_dir(): (book/'forward_table.tex').write_text('\n'.join(tex),encoding='utf-8')
     starts=[-6,-3.2,-1,-.2,.05,.8,1.8,2.3,3.14,3.5,4.2,5.5];results=[];traces=[]
     for start in starts:
         x=start;trace=[x];count=0
@@ -64,3 +65,4 @@ def make_examples(out):
     for r in results:tex.append(f"{r['initial']:g}&{r['solution']:.4f}&{r['cost']:.4f}&{r['iterations']}"+r'\\\hline')
     tex[-1]=tex[-1].replace(r'\hline',r'\lastline');tex +=[r'\end{tabularx}\end{table}']
     (tables/'gradient_table.tex').write_text('\n'.join(tex),encoding='utf-8')
+    if book.is_dir(): (book/'gradient_table.tex').write_text('\n'.join(tex),encoding='utf-8')

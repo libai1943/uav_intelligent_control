@@ -5,14 +5,14 @@ from pathlib import Path
 import argparse,json,time,sys
 import numpy as np
 import casadi as ca
-from model import PAR,aero,trim,motion,symbolic_motion,forward_euler
-from geometry import astar_3d,spline_seed,build_corridors,box_clearance
+from model import PAR,motion,symbolic_motion,forward_euler
+from geometry import astar_3d,spline_seed,build_corridors,box_clearance,segment_clearance
 ROOT=Path(__file__).resolve().parent
-CFG=dict(intervals=200,euler_substeps=8,fragment_steps=10,duration_s=36.,safety_margin_m=8.,astar_extra_clearance_m=30.,
+CFG=dict(intervals=200,fragment_steps=10,duration_s=36.,safety_margin_m=8.,astar_extra_clearance_m=30.,
  grid_step_m=[20,20,10],search_lower_m=[0,-220,80],search_upper_m=[600,220,180],
- state_lower=[-30,-220,75,15,-.3,-.9,-.6],state_upper=[650,220,180,25,.3,.9,.6],
- input_lower=[0,-.03,-.4],input_upper=[40,.18,.4],start_state=[0,0,100,20,0,0,0],
- max_reconstruction_error_m=3.,corridor_node_buffer_m=3.)
+ state_lower=[-30,-220,75,15,-.2,-.9,-.6],state_upper=[650,220,180,25,.2,.9,.6],
+ input_lower=[-2,-.08,-.4],input_upper=[2,.08,.4],start_state=[0,0,100,20,0,0,0],
+ corridor_node_buffer_m=3.)
 SCENES={
  'two':dict(columns=[[250,0,55],[430,-10,45]],goal=[600,0,130,20,0,0,0]),
  'four':dict(columns=[[180,-30,32],[270,15,35],[360,-35,32],[450,20,30]],goal=[600,0,150,20,0,0,0]),
@@ -21,13 +21,12 @@ SCENES={
 def inverse_seed(p,dt):
     v=np.gradient(p,dt,axis=0,edge_order=2);V=np.linalg.norm(v,axis=1)
     ga=np.arctan2(v[:,2],np.linalg.norm(v[:,:2],axis=1));ch=np.unwrap(np.arctan2(v[:,1],v[:,0]))
-    gd=np.gradient(ga,dt,edge_order=2);cd=np.gradient(ch,dt,edge_order=2)
-    A=PAR['m']*(V*gd+PAR['g']*np.cos(ga));B=PAR['m']*V*np.cos(ga)*cd
-    mu=np.unwrap(np.arctan2(B,A));L=np.hypot(A,B)
-    CL=L/(.5*PAR['rho']*V**2*PAR['S']);alpha=(CL-PAR['CL0'])/PAR['CLalpha']
-    _,D=aero(V,alpha);T=PAR['m']*(np.gradient(V,dt,edge_order=2)+PAR['g']*np.sin(ga))+D
-    om=np.gradient(mu,dt,edge_order=2)
-    return np.column_stack((p,V,ga,ch,mu)),np.column_stack((T,alpha,om))[:-1]
+    cd=np.gradient(ch,dt,edge_order=2)
+    phi=np.arctan(V*cd/PAR['g'])
+    a=np.gradient(V,dt,edge_order=2)
+    omega_gamma=np.gradient(ga,dt,edge_order=2)
+    omega_phi=np.gradient(phi,dt,edge_order=2)
+    return np.column_stack((p,V,ga,ch,phi)),np.column_stack((a,omega_gamma,omega_phi))[:-1]
 
 class Problem:
     def __init__(self,scene='two',seed_kind='astar',corridor=False,intervals=200):
@@ -36,7 +35,7 @@ class Problem:
         self.N=intervals;self.M=intervals+1;self.dt=CFG['duration_s']/intervals
         self.obs=np.array(SCENES[scene]['columns'],float)
         start=np.array(CFG['start_state'],float);goal=np.array(SCENES[scene]['goal'],float)
-        self.sx=np.array([600,150,150,20,.3,.6,.6]);self.su=np.array([20,.1,.4])
+        self.sx=np.array([600,150,150,20,.3,.6,.6]);self.su=np.array([2,.08,.4])
         self.scale=np.r_[np.tile(self.sx,self.M),np.tile(self.su,self.N)]
         self.raw,self.expanded=astar_3d(start[:3],goal[:3],self.obs,self.cfg)
         if seed_kind in ('north','south'):
@@ -63,14 +62,10 @@ class Problem:
     def solve(self):
         z=ca.MX.sym('z',len(self.scale));q=z*ca.DM(self.scale)
         X=ca.reshape(q[:7*self.M],7,self.M);U=ca.reshape(q[7*self.M:],3,self.N)
-        # Apply the same first-order explicit Euler formula on eight small steps.
-        # These internal states are expressions, not additional decision variables.
-        prediction=X[:,:-1]
-        for _ in range(CFG['euler_substeps']):
-            prediction=prediction+self.dt/CFG['euler_substeps']*symbolic_motion(prediction,U,ca)
+        # Identical single-step Euler connection in the book and solver.
+        prediction=X[:,:-1]+self.dt*symbolic_motion(X[:,:-1],U,ca)
         eq=ca.vec((X[:,1:]-prediction)/ca.repmat(ca.DM(self.sx),1,self.N))
-        T0,a0=trim();J=self.dt*(.15*ca.sumsqr((U[0,:]-T0)/20)+2*ca.sumsqr((U[1,:]-a0)/.1)
-            +.8*ca.sumsqr(U[2,:]/.4)+.02*ca.sumsqr(X[1,:-1]/100))
+        J=self.dt*(.3*ca.sumsqr(U[0,:]/2)+ca.sumsqr(U[1,:]/.08)+ca.sumsqr(U[2,:]/.4))
         gs=[eq];lbg=[np.zeros(7*self.N)];ubg=[np.zeros(7*self.N)]
         if not self.corridor:
             for cx,cy,r in self.obs:
@@ -103,42 +98,42 @@ class Problem:
           knots=self.knots,boxes=self.boxes,owner=self.owner,columns=self.obs,astar_expanded=self.expanded)
 
     def validate(self,X,U,residual):
-        validation_steps=160
-        dense=forward_euler(X[0],U,self.dt,validation_steps);fine=forward_euler(X[0],U,self.dt,2*validation_steps)
-        clear=min(np.min(np.linalg.norm(dense[:,:2]-o[:2],axis=1)-o[2]) for o in self.obs)
-        sampled_bound=float(clear-26*self.dt/validation_steps/2)
-        violation=max(np.max(np.array(CFG['state_lower'])-dense),np.max(dense-np.array(CFG['state_upper'])),0.)
-        enderr=float(np.linalg.norm(dense[-1,:3]-X[-1,:3]))
-        nodeerr=float(np.max(np.linalg.norm(dense[::validation_steps,:3]-X[:,:3],axis=1)))
-        refinement=float(np.max(np.linalg.norm(dense[:,:3]-fine[::2,:3],axis=1)))
+        # DISCRETE model consistency only, not full-aircraft/continuous validation.
+        rollout=forward_euler(X[0],U,self.dt)
+        clear=min(segment_clearance(a,b,self.obs) for a,b in zip(rollout[:-1,:3],rollout[1:,:3]))
+        violation=max(np.max(np.array(CFG['state_lower'])-rollout),np.max(rollout-np.array(CFG['state_upper'])),0.)
+        terminal=rollout[-1]-np.asarray(SCENES[self.scene]['goal'])
+        nodeerr=float(np.max(np.linalg.norm(rollout[:,:3]-X[:,:3],axis=1)))
         bv=0.
         if self.corridor:
             for k in range(self.N):
-                b=self.boxes[self.owner[k]];d=dense[k*validation_steps:(k+1)*validation_steps+1,:3]
-                bv=max(bv,float(np.max(b[:3]-d)),float(np.max(d-b[3:])))
-        checks=dict(max_scaled_constraint_violation=float(residual),min_rollout_clearance_m=float(clear),
-          sampled_clearance_lower_bound_m=sampled_bound,terminal_position_error_m=enderr,
-          max_node_reconstruction_error_m=nodeerr,refined_rollout_difference_m=refinement,
-          max_rollout_corridor_violation_m=max(0,bv),dense_state_bound_violation=float(violation))
+                box=self.boxes[self.owner[k]];d=rollout[k:k+2,:3]
+                bv=max(bv,float(np.max(box[:3]-d)),float(np.max(d-box[3:])))
+        checks=dict(max_scaled_constraint_violation=float(residual),
+          min_discrete_segment_clearance_m=float(clear),
+          terminal_position_error_m=float(np.linalg.norm(terminal[:3])),
+          terminal_speed_error_m_s=float(abs(terminal[3])),
+          terminal_direction_error_deg=float(np.max(np.abs(np.rad2deg(terminal[4:6])))),
+          terminal_bank_error_deg=float(abs(np.rad2deg(terminal[6]))),
+          max_node_reconstruction_error_m=nodeerr,
+          max_discrete_corridor_violation_m=max(0.,bv),discrete_state_bound_violation=float(violation))
         if self.corridor:checks['whole_box_clearance_m']=float(min(box_clearance(b[:3],b[3:],self.obs) for b in self.boxes))
-        passed=residual<1e-6 and sampled_bound>=8 and nodeerr<CFG['max_reconstruction_error_m'] and refinement<.05 and bv<1e-5 and violation<1e-5
-        return bool(passed),checks,np.c_[np.linspace(0,CFG['duration_s'],len(dense)),dense]
+        passed=(residual<1e-6 and clear>=CFG['safety_margin_m'] and nodeerr<1e-3
+                and np.linalg.norm(terminal[:3])<1e-3 and np.max(np.abs(terminal[3:]))<1e-5
+                and bv<1e-4 and violation<1e-4)
+        return bool(passed),checks,np.c_[np.arange(self.M)*self.dt,rollout]
+
 
 def save(r,folder):
     folder.mkdir(parents=True,exist_ok=True);meta={k:v for k,v in r.items() if not isinstance(v,np.ndarray)}
     (folder/'result.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf-8')
     np.savez_compressed(folder/'data.npz',**{k:v for k,v in r.items() if isinstance(v,np.ndarray)})
-    np.savetxt(folder/'state.csv',np.c_[r['time'],r['X']],delimiter=',',header='t,x,y,z,V,gamma,chi,mu',comments='')
-    np.savetxt(folder/'control.csv',np.c_[r['time'][:-1],r['U']],delimiter=',',header='t,T,alpha,omega_mu',comments='')
+    np.savetxt(folder/'state.csv',np.c_[r['time'],r['X']],delimiter=',',header='t,x,y,z,V,gamma,chi,phi',comments='')
+    np.savetxt(folder/'control.csv',np.c_[r['time'][:-1],r['U']],delimiter=',',header='t,a,omega_gamma,omega_phi',comments='')
 
 def main():
-    ap=argparse.ArgumentParser(description='Fixed-wing trajectory planning experiments')
-    ap.add_argument('--case',default='all',choices=['all','two_straight','two_north','two_south',
-        'two_corridor','four_direct','four_corridor','five_corridor','four_grid100'])
-    ap.add_argument('--plots-only',action='store_true')
-    ap.add_argument('--no-plots',action='store_true')
-    args=ap.parse_args()
-    out=ROOT/'results_euler';out.mkdir(exist_ok=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--case',default='all');ap.add_argument('--plots-only',action='store_true');ap.add_argument('--no-plots',action='store_true');args=ap.parse_args()
+    out=ROOT/'results_kinematic';out.mkdir(exist_ok=True)
     jobs=[('two_straight','two','straight',False,200),('two_north','two','north',False,200),
       ('two_south','two','south',False,200),('two_corridor','two','astar',True,200),
       ('four_direct','four','astar',False,200),('four_corridor','four','astar',True,200),
@@ -162,7 +157,7 @@ def main():
         plot_all(results,out)
         from tables import make_tables
         make_tables(results)
-    assert all(r['accepted'] for r in results.values()),'Inspect result.json: failed independent checks.'
+    assert all(r['accepted'] for r in results.values()),'Inspect result.json: failed discrete-model checks.'
     print(f'Finished: {out}',flush=True)
 
 if __name__=='__main__':main()

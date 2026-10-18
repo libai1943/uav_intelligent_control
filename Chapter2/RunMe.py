@@ -1,7 +1,7 @@
 """第二章：多旋翼竖直通道 PID 教学实验。
 
 运行 python RunMe.py，生成 results 下的 PDF/PNG、逐时刻 CSV 和核验 JSON。
-仅使用 NumPy、Matplotlib；连续反馈用 RK4 积分，并以步长减半核验。
+仅使用 NumPy、Matplotlib；采样反馈与对象均用单步显式欧拉推进，并以步长减半作数值对照。
 这是一维、近水平、推力瞬时执行的教学模型，不是可上传飞控的程序。
 """
 from pathlib import Path
@@ -95,27 +95,21 @@ def signals(t, y, cfg):
     return r, rd, e, vref, raw, thrust, di
 
 
-def simulate(cfg, dt=.005):
+def simulate(cfg, dt=.002):
     n = int(round(cfg.t_end/dt))
     times = np.arange(n+1)*dt
     y = np.array([cfg.h0, cfg.v0, 0.0], dtype=float)
     data = np.empty((n+1, 12))
     for k, t in enumerate(times):
         r, rd, e, vref, raw, thrust, di = signals(t, y, cfg)
-        # 扰动阶跃与网格对齐。一个积分区间内固定外力，避免 RK4
-        # 在阶跃前一格的末端提前使用阶跃后的外力。
+        # 每个采样周期计算一次控制并保持；积分状态在周期末更新。
         d = cfg.wind if t >= cfg.wind_at-1e-10 else 0.0
         data[k] = (t, r, y[0], y[1], e, y[2], raw, thrust, d, vref, rd, di)
         if k == n:
             break
-        def rhs(tt, yy):
-            ss = signals(tt, yy, cfg)
-            return np.array([yy[1], (ss[5]-cfg.m*G-cfg.drag*yy[1]+d)/cfg.m, ss[6]])
-        k1 = rhs(t, y)
-        k2 = rhs(t+dt/2, y+dt*k1/2)
-        k3 = rhs(t+dt/2, y+dt*k2/2)
-        k4 = rhs(t+dt, y+dt*k3)
-        y += dt*(k1+2*k2+2*k3+k4)/6
+        acceleration = (thrust-cfg.m*G-cfg.drag*y[1]+d)/cfg.m
+        y += dt*np.array([y[1], acceleration, di])
+
     return data
 
 
@@ -193,7 +187,7 @@ def main():
     checks = {}
     for cfg in cases:
         d = simulate(cfg)
-        fine = simulate(cfg, dt=.0025)
+        fine = simulate(cfg, dt=.001)
         difference = float(np.max(np.abs(d[:,2]-fine[::2,2])))
         assert np.isfinite(d).all()
         assert difference < .025, (cfg.name,difference)
@@ -201,13 +195,10 @@ def main():
         results[cfg.name]=d
         checks[cfg.name]={'step_halving_max_height_difference_m':difference}
         save_series(cfg.name,d)
-    p = results['p_only']
-    exact = 3-np.cos(np.sqrt(4/M)*p[:,0])
-    analytic_error = float(np.max(np.abs(p[:,2]-exact)))
-    assert analytic_error < 1e-6
+
+
     assert abs(np.mean(results['pd_wind'][-401:,4])-.5)<1e-5
     assert abs(np.mean(results['pid_wind'][-401:,4]))<.005
-    checks['analytic_p_max_error_m']=analytic_error
     checks['pd_disturbance_theory_error_m']=.5
     checks['pd_disturbance_numeric_tail_error_m']=float(np.mean(results['pd_wind'][-401:,4]))
     checks['pid_disturbance_numeric_tail_error_m']=float(np.mean(results['pid_wind'][-401:,4]))
@@ -266,8 +257,8 @@ def main():
     metrics['cascade']={'height_rmse_m':float(np.sqrt(np.mean(d[:,4]**2))),
                        'maximum_absolute_error_m':float(np.max(np.abs(d[:,4]))),
                        'peak_thrust_N':float(np.max(d[:,7]))}
-    info={'parameters':[asdict(c) for c in cases],'integration':'RK4 continuous feedback',
-          'dt_s':.005,'refined_dt_s':.0025,'g_m_s2':G,
+    info={'parameters':[asdict(c) for c in cases],'integration':'sampled feedback and single-step explicit Euler',
+          'dt_s':.002,'refined_dt_s':.001,'g_m_s2':G,
           'python':platform.python_version(),'numpy':np.__version__,
           'matplotlib':matplotlib.__version__, 'checks':checks,'metrics':metrics}
     (OUT/'results.json').write_text(json.dumps(info,ensure_ascii=False,indent=2),encoding='utf-8')
