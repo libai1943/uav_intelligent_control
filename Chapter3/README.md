@@ -22,7 +22,7 @@ python RunMe.py
 
 ## 二、模型与自由变量
 
-状态：[x,y,h,V,gamma,chi,mu]。
+状态：[x,y,z,V,gamma,chi,mu]。
 输入：[T,alpha,omega_mu]，分别为推力、迎角、升力倾侧角变化率。
 无风、恒定质量、局部惯性系、协调飞行、小迎角近似。
 L=0.5*rho*V^2*S*(CL0+CLalpha*alpha)，D采用抛物线阻力极曲线。
@@ -87,7 +87,7 @@ accepted同时要求求解器成功与独立检查通过。失败仍保存诊断
 summary.json：参数、环境版本、全部场景结果。
 各算例/result.json：成功标志、迭代、耗时、代价、检查值。
 各算例/data.npz：状态、输入、完整初始解、走廊、路径、迭代轨迹等。
-各算例/state.csv：t,x,y,h,V,gamma,chi,mu（201行，默认）。
+各算例/state.csv：t,x,y,z,V,gamma,chi,mu（201行，默认）。
 各算例/control.csv：t,T,alpha,omega_mu（200行，默认；每行用于随后一个区间）。
 CSV采用SI单位和弧度；图片将部分角度转换为度。
 PDF为矢量图，PNG供浏览。tables.py按实算结果生成results_euler/tables/中的LaTeX表格片段。

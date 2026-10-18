@@ -62,7 +62,7 @@ def plan3d(r,out,name):
     ax.plot(*r['spline'].T,color=WARM,ls='--',lw=1.6)
     ax.plot(*r['X'][:,:3].T,color=BLUE,lw=2.5)
     ax.scatter(*r['X'][0,:3],c=BLUE,s=35);ax.scatter(*r['X'][-1,:3],c=BLUE,marker='*',s=80)
-    ax.set(xlim=(-20,640),ylim=(-220,220),zlim=(60,185),xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',zlabel='高度 $h$ / m')
+    ax.set(xlim=(-20,640),ylim=(-220,220),zlim=(60,185),xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',zlabel='高度 $z$ / m')
     ax.set_box_aspect((660,440,125),zoom=1.15);ax.view_init(elev=32,azim=-62)
     ax.set_xticks([0,200,400,600]);ax.set_yticks([-200,0,200]);ax.set_zticks([80,120,160])
     for a in [ax.xaxis,ax.yaxis,ax.zaxis]:a.pane.fill=False

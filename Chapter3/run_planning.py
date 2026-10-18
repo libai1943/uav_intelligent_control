@@ -128,7 +128,7 @@ def save(r,folder):
     folder.mkdir(parents=True,exist_ok=True);meta={k:v for k,v in r.items() if not isinstance(v,np.ndarray)}
     (folder/'result.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2),encoding='utf-8')
     np.savez_compressed(folder/'data.npz',**{k:v for k,v in r.items() if isinstance(v,np.ndarray)})
-    np.savetxt(folder/'state.csv',np.c_[r['time'],r['X']],delimiter=',',header='t,x,y,h,V,gamma,chi,mu',comments='')
+    np.savetxt(folder/'state.csv',np.c_[r['time'],r['X']],delimiter=',',header='t,x,y,z,V,gamma,chi,mu',comments='')
     np.savetxt(folder/'control.csv',np.c_[r['time'][:-1],r['U']],delimiter=',',header='t,T,alpha,omega_mu',comments='')
 
 def main():
