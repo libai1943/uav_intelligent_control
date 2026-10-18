@@ -1,0 +1,17 @@
+# Python environments and caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Reproducible experiment outputs
+Chapter2/results/
+Chapter3/results_euler/
+
+# Editor / OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log

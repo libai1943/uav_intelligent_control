@@ -1,0 +1,3 @@
+# Direct dependency versions used for the recorded Windows run; not a full lockfile.
+numpy==2.5.4
+matplotlib==3.11.2

@@ -1,0 +1,733 @@
+{
+  "environment": {
+    "date": "2026-10-19",
+    "os": "Windows",
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.5.4",
+      "matplotlib": "3.11.2",
+      "scipy": "1.18.1",
+      "casadi": "3.7.2",
+      "pypdf": "6.10.0",
+      "pillow": "12.3.0"
+    }
+  },
+  "exit_code": 0,
+  "progressive": {
+    "model": "m*h_ddot=T-m*g-b*h_dot+d_z",
+    "dt_s": 0.005,
+    "refined_dt_s": 0.0025,
+    "parameters": [
+      {
+        "name": "stage_p",
+        "kp": 4,
+        "ki": 0,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_p_wind",
+        "kp": 4,
+        "ki": 0,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_p8_wind",
+        "kp": 8,
+        "ki": 0,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_pi",
+        "kp": 4,
+        "ki": 1.2,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_pid",
+        "kp": 4,
+        "ki": 1.2,
+        "kd": 1.5,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_no_drag",
+        "kp": 4,
+        "ki": 0,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0,
+        "t_end": 14,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 14,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "stage_cascade",
+        "kp": 4.0,
+        "ki": 0.0,
+        "kd": 5.5,
+        "h0": 2,
+        "r": 3,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 14,
+        "antiwindup": true,
+        "cascade": true,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "feedback_hover",
+        "kp": 4,
+        "ki": 1.2,
+        "kd": 1.5,
+        "h0": 3,
+        "r": 3,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 1.6,
+        "t_end": 12,
+        "tmax": 34.531200000000005,
+        "wind": -0.4,
+        "wind_at": 2,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      }
+    ],
+    "checks": {
+      "stage_p": {
+        "halved_step_height_error_m": 3.717604002417829e-11
+      },
+      "stage_p_wind": {
+        "halved_step_height_error_m": 3.717604002417829e-11
+      },
+      "stage_p8_wind": {
+        "halved_step_height_error_m": 2.048770042506476e-10
+      },
+      "stage_pi": {
+        "halved_step_height_error_m": 4.689582056016661e-11,
+        "closed_loop_poles": [
+          [
+            -0.33547006745985186,
+            1.4719647969855951
+          ],
+          [
+            -0.33547006745985186,
+            -1.4719647969855951
+          ],
+          [
+            -0.32905986508029644,
+            0.0
+          ]
+        ]
+      },
+      "stage_pid": {
+        "halved_step_height_error_m": 1.73749903353837e-11,
+        "closed_loop_poles": [
+          [
+            -0.7701465819604663,
+            1.13800670824884
+          ],
+          [
+            -0.7701465819604663,
+            -1.13800670824884
+          ],
+          [
+            -0.3972068360790671,
+            0.0
+          ]
+        ]
+      },
+      "stage_no_drag": {
+        "halved_step_height_error_m": 6.241380745564129e-10
+      },
+      "stage_cascade": {
+        "halved_step_height_error_m": 5.31921173774208e-11
+      },
+      "analytic_p_max_height_error_m": 3.965450190435149e-11
+    },
+    "metrics": {
+      "stage_p": {
+        "initial_step": {
+          "rise_10_90_s": 0.849130087530402,
+          "overshoot_percent": 35.091964674664,
+          "settling_2percent_observed_s": 7.075,
+          "tail_mean_error_m": 0.0011283495271888493,
+          "peak_thrust_N": 19.696
+        },
+        "final_2s_mean_error_m": 5.849145174857725e-10,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.696
+      },
+      "stage_p_wind": {
+        "initial_step": {
+          "rise_10_90_s": 0.849130087530402,
+          "overshoot_percent": 35.091964674664,
+          "settling_2percent_observed_s": 7.075,
+          "tail_mean_error_m": 0.0011283495271888493,
+          "peak_thrust_N": 19.696
+        },
+        "final_2s_mean_error_m": 0.49999903985865646,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.696
+      },
+      "stage_p8_wind": {
+        "initial_step": {
+          "rise_10_90_s": 0.549816175906935,
+          "overshoot_percent": 48.639407639066555,
+          "settling_2percent_observed_s": 7.565,
+          "tail_mean_error_m": -0.0005035194913778423,
+          "peak_thrust_N": 23.696
+        },
+        "final_2s_mean_error_m": 0.25000039234517135,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 23.696
+      },
+      "stage_pi": {
+        "initial_step": {
+          "rise_10_90_s": 0.7617894063683591,
+          "overshoot_percent": 58.943278030535936,
+          "settling_2percent_observed_s": 11.35,
+          "tail_mean_error_m": 0.008496024214651694,
+          "peak_thrust_N": 19.769375648103985
+        },
+        "final_2s_mean_error_m": 0.00011661844352749697,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.769375648103985
+      },
+      "stage_pid": {
+        "initial_step": {
+          "rise_10_90_s": 0.9801189646283297,
+          "overshoot_percent": 32.230702529914446,
+          "settling_2percent_observed_s": 8.02,
+          "tail_mean_error_m": -0.0024987845696692007,
+          "peak_thrust_N": 19.696
+        },
+        "final_2s_mean_error_m": 4.34840906237501e-05,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.696
+      },
+      "stage_no_drag": {
+        "initial_step": {
+          "rise_10_90_s": 0.6448548981685855,
+          "overshoot_percent": 99.99997880906584,
+          "settling_2percent_observed_s": null,
+          "tail_mean_error_m": -0.07961482438402254,
+          "peak_thrust_N": 19.696
+        },
+        "final_2s_mean_error_m": -0.08455944126389142,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.696
+      },
+      "stage_cascade": {
+        "initial_step": {
+          "rise_10_90_s": 2.346504872219572,
+          "overshoot_percent": 2.1694924571461716,
+          "settling_2percent_observed_s": 6.58,
+          "tail_mean_error_m": -0.0016937250102416544,
+          "peak_thrust_N": 19.696
+        },
+        "final_2s_mean_error_m": 3.3641364407925994e-06,
+        "minimum_height_m": 2.0,
+        "maximum_thrust_N": 19.696
+      }
+    },
+    "feedforward_feedback": {
+      "open_final_height_m": 0.7499886500175594,
+      "closed_final_height_m": 2.996722399418686
+    }
+  },
+  "introduction": {
+    "parameters": {
+      "name": "intro_performance",
+      "kp": 4,
+      "ki": 0,
+      "kd": 2.4,
+      "h0": 2.0,
+      "r": 3.0,
+      "v0": 0.0,
+      "m": 1.6,
+      "m0": 1.6,
+      "drag": 0.0,
+      "t_end": 12,
+      "tmax": 34.531200000000005,
+      "wind": -0.4,
+      "wind_at": 0,
+      "antiwindup": false,
+      "cascade": false,
+      "smooth": false,
+      "kh": 0.8,
+      "kv": 5.0,
+      "kiv": 2.0,
+      "vmax": 1.0
+    },
+    "terminal_height_m": 2.9,
+    "steady_error_m": 0.10000000000000009,
+    "rise_10_90_terminal_s": 1.0051939379857895,
+    "first_peak_time_s": 2.256986789572368,
+    "peak_height_m": 3.0656131539969045,
+    "overshoot_terminal_percent": 18.401461555211622,
+    "overshoot_reference_percent": 6.561315399690448,
+    "settling_terminal_2percent_observed_s": 5.2250000000000005,
+    "settling_reference_2percent_observed_s": null,
+    "analytical_height_max_error_m": 2.404965115943014e-11,
+    "step_halving_max_height_difference_m": 2.254729736250738e-11,
+    "post_observation_error_envelope_m": 0.00012616570564765478
+  },
+  "extended_experiments": {
+    "parameters": [
+      {
+        "name": "p_only",
+        "kp": 4.0,
+        "ki": 0.0,
+        "kd": 0,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 14,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "pd",
+        "kp": 4.0,
+        "ki": 0.0,
+        "kd": 5.5,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 14,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "pd_wind",
+        "kp": 4.0,
+        "ki": 0.0,
+        "kd": 5.5,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "pid_wind",
+        "kp": 4.0,
+        "ki": 1.2,
+        "kd": 5.5,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 40,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "gain2",
+        "kp": 2,
+        "ki": 0.0,
+        "kd": 3,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 24,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "gain4",
+        "kp": 4,
+        "ki": 0.0,
+        "kd": 3,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 24,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "gain8",
+        "kp": 8,
+        "ki": 0.0,
+        "kd": 3,
+        "h0": 2.0,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 24,
+        "tmax": 34.531200000000005,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "windup",
+        "kp": 6,
+        "ki": 2,
+        "kd": 4,
+        "h0": 2.0,
+        "r": 8,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 40,
+        "tmax": 19.62,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": false,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "antiwindup",
+        "kp": 6,
+        "ki": 2,
+        "kd": 4,
+        "h0": 2.0,
+        "r": 8,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 40,
+        "tmax": 19.62,
+        "wind": 0.0,
+        "wind_at": 6.0,
+        "antiwindup": true,
+        "cascade": false,
+        "smooth": false,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      },
+      {
+        "name": "cascade",
+        "kp": 4.0,
+        "ki": 0.0,
+        "kd": 5.5,
+        "h0": 3,
+        "r": 3.0,
+        "v0": 0.0,
+        "m": 1.6,
+        "m0": 1.6,
+        "drag": 0.0,
+        "t_end": 30,
+        "tmax": 34.531200000000005,
+        "wind": -2,
+        "wind_at": 6.0,
+        "antiwindup": true,
+        "cascade": true,
+        "smooth": true,
+        "kh": 0.8,
+        "kv": 5.0,
+        "kiv": 2.0,
+        "vmax": 1.0
+      }
+    ],
+    "integration": "RK4 continuous feedback",
+    "dt_s": 0.005,
+    "refined_dt_s": 0.0025,
+    "g_m_s2": 9.81,
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2",
+    "checks": {
+      "p_only": {
+        "step_halving_max_height_difference_m": 6.241380745564129e-10
+      },
+      "pd": {
+        "step_halving_max_height_difference_m": 4.321165647525049e-11
+      },
+      "pd_wind": {
+        "step_halving_max_height_difference_m": 4.321165647525049e-11
+      },
+      "pid_wind": {
+        "step_halving_max_height_difference_m": 3.766897904711186e-11
+      },
+      "gain2": {
+        "step_halving_max_height_difference_m": 6.147082842744567e-12
+      },
+      "gain4": {
+        "step_halving_max_height_difference_m": 2.134958876354176e-11
+      },
+      "gain8": {
+        "step_halving_max_height_difference_m": 1.1257306198331207e-10
+      },
+      "windup": {
+        "step_halving_max_height_difference_m": 1.944176869272951e-06
+      },
+      "antiwindup": {
+        "step_halving_max_height_difference_m": 0.00040535543587338907
+      },
+      "cascade": {
+        "step_halving_max_height_difference_m": 1.3951506616649567e-11
+      },
+      "analytic_p_max_error_m": 6.657416840027963e-10,
+      "pd_disturbance_theory_error_m": 0.5,
+      "pd_disturbance_numeric_tail_error_m": 0.49999999999996597,
+      "pid_disturbance_numeric_tail_error_m": -1.1478820083072451e-06
+    },
+    "metrics": {
+      "p_only": {
+        "rise_10_90_s": 0.6448548981685855,
+        "overshoot_percent": 99.99997880906584,
+        "settling_2percent_observed_s": null,
+        "tail_mean_error_m": -0.08455944126389142,
+        "peak_thrust_N": 19.696
+      },
+      "pd": {
+        "rise_10_90_s": 2.400961151247046,
+        "overshoot_percent": 0.0,
+        "settling_2percent_observed_s": 4.295,
+        "tail_mean_error_m": 2.6715306062414912e-06,
+        "peak_thrust_N": 19.696
+      },
+      "pd_wind": {
+        "rise_10_90_s": 2.400961151247046,
+        "overshoot_percent": 0.0,
+        "settling_2percent_observed_s": null,
+        "tail_mean_error_m": 0.49999999999996597,
+        "peak_thrust_N": 19.696
+      },
+      "pid_wind": {
+        "rise_10_90_s": 1.4860469024463598,
+        "overshoot_percent": 23.853257244829784,
+        "settling_2percent_observed_s": 14.780000000000001,
+        "tail_mean_error_m": -1.1478820083072451e-06,
+        "peak_thrust_N": 19.696
+      },
+      "gain2": {
+        "rise_10_90_s": 2.3425628905959286,
+        "overshoot_percent": 0.794818308622558,
+        "settling_2percent_observed_s": 3.6550000000000002,
+        "tail_mean_error_m": 8.374615171466102e-10,
+        "peak_thrust_N": 17.696
+      },
+      "gain4": {
+        "rise_10_90_s": 1.1618765548167531,
+        "overshoot_percent": 9.894133331370325,
+        "settling_2percent_observed_s": 3.755,
+        "tail_mean_error_m": -4.891566420412869e-10,
+        "peak_thrust_N": 19.696
+      },
+      "gain8": {
+        "rise_10_90_s": 0.6682602662274689,
+        "overshoot_percent": 23.43734256301797,
+        "settling_2percent_observed_s": 3.7600000000000002,
+        "tail_mean_error_m": 2.3860442577128688e-11,
+        "peak_thrust_N": 23.696
+      },
+      "windup": {
+        "rise_10_90_s": 1.399456568667516,
+        "overshoot_percent": 50.7930939135486,
+        "settling_2percent_observed_s": 10.28,
+        "tail_mean_error_m": -4.0995733042916783e-07,
+        "peak_thrust_N": 19.62
+      },
+      "antiwindup": {
+        "rise_10_90_s": 1.5288244556372352,
+        "overshoot_percent": 11.672929752114559,
+        "settling_2percent_observed_s": 5.04,
+        "tail_mean_error_m": -4.108525767645305e-08,
+        "peak_thrust_N": 19.62
+      },
+      "cascade": {
+        "height_rmse_m": 0.08647440329723173,
+        "maximum_absolute_error_m": 0.26412389927395497,
+        "peak_thrust_N": 17.915076866492644
+      }
+    }
+  }
+}

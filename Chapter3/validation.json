@@ -1,0 +1,408 @@
+{
+  "config": {
+    "intervals": 200,
+    "euler_substeps": 8,
+    "fragment_steps": 10,
+    "duration_s": 36.0,
+    "safety_margin_m": 8.0,
+    "astar_extra_clearance_m": 30.0,
+    "grid_step_m": [
+      20,
+      20,
+      10
+    ],
+    "search_lower_m": [
+      0,
+      -220,
+      80
+    ],
+    "search_upper_m": [
+      600,
+      220,
+      180
+    ],
+    "state_lower": [
+      -30,
+      -220,
+      75,
+      15,
+      -0.3,
+      -0.9,
+      -0.6
+    ],
+    "state_upper": [
+      650,
+      220,
+      180,
+      25,
+      0.3,
+      0.9,
+      0.6
+    ],
+    "input_lower": [
+      0,
+      -0.03,
+      -0.4
+    ],
+    "input_upper": [
+      40,
+      0.18,
+      0.4
+    ],
+    "start_state": [
+      0,
+      0,
+      100,
+      20,
+      0,
+      0,
+      0
+    ],
+    "max_reconstruction_error_m": 3.0,
+    "corridor_node_buffer_m": 3.0
+  },
+  "aircraft": {
+    "m": 8.0,
+    "g": 9.81,
+    "rho": 1.225,
+    "S": 0.8,
+    "CL0": 0.2,
+    "CLalpha": 4.8,
+    "CD0": 0.04,
+    "k": 0.06
+  },
+  "scenes": {
+    "two": {
+      "columns": [
+        [
+          250,
+          0,
+          55
+        ],
+        [
+          430,
+          -10,
+          45
+        ]
+      ],
+      "goal": [
+        600,
+        0,
+        130,
+        20,
+        0,
+        0,
+        0
+      ]
+    },
+    "four": {
+      "columns": [
+        [
+          180,
+          -30,
+          32
+        ],
+        [
+          270,
+          15,
+          35
+        ],
+        [
+          360,
+          -35,
+          32
+        ],
+        [
+          450,
+          20,
+          30
+        ]
+      ],
+      "goal": [
+        600,
+        0,
+        150,
+        20,
+        0,
+        0,
+        0
+      ]
+    },
+    "five": {
+      "columns": [
+        [
+          150,
+          65,
+          28
+        ],
+        [
+          225,
+          -65,
+          28
+        ],
+        [
+          300,
+          70,
+          30
+        ],
+        [
+          375,
+          -65,
+          28
+        ],
+        [
+          450,
+          65,
+          28
+        ]
+      ],
+      "goal": [
+        600,
+        0,
+        160,
+        20,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "casadi": "3.7.2",
+  "results": [
+    {
+      "scene": "two",
+      "seed_kind": "straight",
+      "corridor": false,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 1.33915747643659,
+      "iterations": 27,
+      "seconds": 0.3978022000519559,
+      "checks": {
+        "max_scaled_constraint_violation": 2.4485043622253977e-13,
+        "min_rollout_clearance_m": 12.90899974589216,
+        "sampled_clearance_lower_bound_m": 12.89437474589216,
+        "terminal_position_error_m": 1.2900887140720387,
+        "max_node_reconstruction_error_m": 1.300842600454936,
+        "refined_rollout_difference_m": 0.032032670553037296,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0
+      },
+      "derivative_check_max_error": 7.2004411322268425e-09,
+      "initial_max_scaled_defect": 0.16652798573983663,
+      "nonlinear_obstacle_constraints": 402,
+      "position_box_bounds": 0,
+      "astar_expanded": 2059
+    },
+    {
+      "scene": "two",
+      "seed_kind": "north",
+      "corridor": false,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 1.3391574764374259,
+      "iterations": 15,
+      "seconds": 0.2347863000468351,
+      "checks": {
+        "max_scaled_constraint_violation": 2.0502118521411225e-13,
+        "min_rollout_clearance_m": 12.908999743157445,
+        "sampled_clearance_lower_bound_m": 12.894374743157444,
+        "terminal_position_error_m": 1.290088713885131,
+        "max_node_reconstruction_error_m": 1.3008426003341451,
+        "refined_rollout_difference_m": 0.03203267075090208,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0
+      },
+      "derivative_check_max_error": 9.688221780379536e-09,
+      "initial_max_scaled_defect": 0.47084925403858263,
+      "nonlinear_obstacle_constraints": 402,
+      "position_box_bounds": 0,
+      "astar_expanded": 879
+    },
+    {
+      "scene": "two",
+      "seed_kind": "south",
+      "corridor": false,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 1.3849190220804544,
+      "iterations": 20,
+      "seconds": 0.31430399999953806,
+      "checks": {
+        "max_scaled_constraint_violation": 5.889733145636455e-13,
+        "min_rollout_clearance_m": 11.40266787527262,
+        "sampled_clearance_lower_bound_m": 11.38804287527262,
+        "terminal_position_error_m": 1.3075521898024014,
+        "max_node_reconstruction_error_m": 1.3076679227860069,
+        "refined_rollout_difference_m": 0.03216357779160337,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0
+      },
+      "derivative_check_max_error": 2.134697751898784e-09,
+      "initial_max_scaled_defect": 0.8011768956119677,
+      "nonlinear_obstacle_constraints": 402,
+      "position_box_bounds": 0,
+      "astar_expanded": 813
+    },
+    {
+      "scene": "two",
+      "seed_kind": "astar",
+      "corridor": true,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 1.4597637073333727,
+      "iterations": 22,
+      "seconds": 0.30704189999960363,
+      "checks": {
+        "max_scaled_constraint_violation": 1.648449895104894e-12,
+        "min_rollout_clearance_m": 29.547386116830396,
+        "sampled_clearance_lower_bound_m": 29.532761116830397,
+        "terminal_position_error_m": 1.0340106614844304,
+        "max_node_reconstruction_error_m": 1.0340106614844304,
+        "refined_rollout_difference_m": 0.025328986939605235,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0,
+        "whole_box_clearance_m": 8.077842940914458
+      },
+      "derivative_check_max_error": 2.8585780964540675e-10,
+      "initial_max_scaled_defect": 0.7112373485044392,
+      "nonlinear_obstacle_constraints": 0,
+      "position_box_bounds": 1206,
+      "astar_expanded": 2059
+    },
+    {
+      "scene": "four",
+      "seed_kind": "astar",
+      "corridor": false,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 1.6835376806518576,
+      "iterations": 22,
+      "seconds": 0.32133870001416653,
+      "checks": {
+        "max_scaled_constraint_violation": 9.274062999035475e-13,
+        "min_rollout_clearance_m": 11.304986876469933,
+        "sampled_clearance_lower_bound_m": 11.290361876469932,
+        "terminal_position_error_m": 1.2257648163757455,
+        "max_node_reconstruction_error_m": 1.2257648163757455,
+        "refined_rollout_difference_m": 0.029967462475159988,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0
+      },
+      "derivative_check_max_error": 1.2138286820118083e-08,
+      "initial_max_scaled_defect": 0.9583216280900788,
+      "nonlinear_obstacle_constraints": 804,
+      "position_box_bounds": 0,
+      "astar_expanded": 1793
+    },
+    {
+      "scene": "four",
+      "seed_kind": "astar",
+      "corridor": true,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 2.135097009617512,
+      "iterations": 19,
+      "seconds": 0.23849279998103157,
+      "checks": {
+        "max_scaled_constraint_violation": 2.5610210248790586e-09,
+        "min_rollout_clearance_m": 26.316475354066462,
+        "sampled_clearance_lower_bound_m": 26.301850354066463,
+        "terminal_position_error_m": 0.6782605721152756,
+        "max_node_reconstruction_error_m": 0.8863294942221098,
+        "refined_rollout_difference_m": 0.021688396647660396,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0,
+        "whole_box_clearance_m": 8.085331824415874
+      },
+      "derivative_check_max_error": 3.1762381960676045e-10,
+      "initial_max_scaled_defect": 0.9583216280900788,
+      "nonlinear_obstacle_constraints": 0,
+      "position_box_bounds": 1206,
+      "astar_expanded": 1793
+    },
+    {
+      "scene": "five",
+      "seed_kind": "astar",
+      "corridor": true,
+      "intervals": 200,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 5.260634030516315,
+      "iterations": 30,
+      "seconds": 0.3600639999494888,
+      "checks": {
+        "max_scaled_constraint_violation": 1.5565696879586237e-11,
+        "min_rollout_clearance_m": 14.073436520774763,
+        "sampled_clearance_lower_bound_m": 14.058811520774762,
+        "terminal_position_error_m": 1.5306114922334408,
+        "max_node_reconstruction_error_m": 1.6080142482940094,
+        "refined_rollout_difference_m": 0.039608100418569665,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0,
+        "whole_box_clearance_m": 8.084138358888133
+      },
+      "derivative_check_max_error": 1.4129453163036487e-09,
+      "initial_max_scaled_defect": 0.6337084104539252,
+      "nonlinear_obstacle_constraints": 0,
+      "position_box_bounds": 1206,
+      "astar_expanded": 1018
+    },
+    {
+      "scene": "four",
+      "seed_kind": "astar",
+      "corridor": true,
+      "intervals": 100,
+      "solver_success": true,
+      "accepted": true,
+      "message": "Solve_Succeeded",
+      "objective": 2.1224730845268653,
+      "iterations": 18,
+      "seconds": 0.11928929999703541,
+      "checks": {
+        "max_scaled_constraint_violation": 2.755096498163745e-12,
+        "min_rollout_clearance_m": 26.500580631165583,
+        "sampled_clearance_lower_bound_m": 26.471330631165582,
+        "terminal_position_error_m": 1.381370039640917,
+        "max_node_reconstruction_error_m": 1.7677159286837543,
+        "refined_rollout_difference_m": 0.0400228844684149,
+        "max_rollout_corridor_violation_m": 0,
+        "dense_state_bound_violation": 0.0,
+        "whole_box_clearance_m": 8.085331824415874
+      },
+      "derivative_check_max_error": 2.1194863225604266e-10,
+      "initial_max_scaled_defect": 0.9770105269796061,
+      "nonlinear_obstacle_constraints": 0,
+      "position_box_bounds": 606,
+      "astar_expanded": 1793
+    }
+  ],
+  "environment": {
+    "date": "2026-10-19",
+    "os": "Windows",
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.5.4",
+      "matplotlib": "3.11.2",
+      "scipy": "1.18.1",
+      "casadi": "3.7.2",
+      "pypdf": "6.10.0",
+      "pillow": "12.3.0"
+    }
+  },
+  "exit_code": 0
+}

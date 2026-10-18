@@ -1,0 +1,7 @@
+# Direct dependency versions used for the recorded Windows run; not a full lockfile.
+numpy==2.5.4
+matplotlib==3.11.2
+scipy==1.18.1
+casadi==3.7.2
+pypdf==6.10.0
+pillow==12.3.0
