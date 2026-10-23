@@ -109,7 +109,10 @@ def build_corridors(seed, columns, cfg):
     group = cfg.get('fragment_steps', 10)
     if N % group:
         raise ValueError('intervals must be divisible by fragment_steps.')
-    lower, upper = np.array(cfg['state_lower'][:3]), np.array(cfg['state_upper'][:3])
+    # Float arrays are essential: integer arrays would truncate the safe-box
+    # boundaries when node_lo/node_hi receive non-integer spline coordinates.
+    lower = np.array(cfg['state_lower'][:3], dtype=float)
+    upper = np.array(cfg['state_upper'][:3], dtype=float)
     boxes, owner = [], np.repeat(np.arange(N//group), group)
     node_lo = np.tile(lower, (N+1, 1)); node_hi = np.tile(upper, (N+1, 1))
     margin = cfg['safety_margin_m']

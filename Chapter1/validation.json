@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "file": "wind_0.csv",
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "wind_3.csv",
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "wind_5.csv",
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "time_schedules.csv",
+      "max_absolute_difference": 4.900080341485591e-12
+    }
+  ]
+}

@@ -79,6 +79,8 @@ def plot_all(results,out):
         if key in results:plan3d(results[key],out,key+'_3d')
     if all(k in results for k in ['two_north','two_south']):
         fig,ax=plt.subplots(figsize=(10,4.6));obstacles2d(ax,results['two_north']['columns'])
+        if 'two_straight' in results:
+            ax.plot(*results['two_straight']['initial_X'][:,:2].T,':',color='.4',lw=1.4,label='直连初始解（不可行）')
         for name,col,label in [('two_north',BLUE,'北侧初始解'),('two_south',WARM,'南侧初始解')]:
             r=results[name];ax.plot(*r['initial_X'][:,:2].T,'--',color=col,lw=1.3,label=label)
             ax.plot(*r['X'][:,:2].T,color=col,lw=2.4,label=label[:2]+'优化结果')
@@ -91,7 +93,7 @@ def plot_all(results,out):
             h=results[name]['history'];i=np.arange(1,len(h)+1)
             axs[0].plot(i,h[:,0],color=col,ls=ls,label=label)
             axs[1].semilogy(i,np.maximum(h[:,1],1e-12),color=col,ls=ls,label=label)
-        for a,l in zip(axs,['离散代价 $J_N$','最大尺度化约束违反量']):
+        for a,l in zip(axs,['离散代价 $J_N$','IPOPT原始约束不可行度']):
             a.set(xlabel='迭代次数',ylabel=l);a.grid(alpha=.15)
         axs[0].legend(frameon=False);fig.tight_layout();finish(fig,out,'convergence_compare')
     if 'four_corridor' in results:
@@ -105,17 +107,45 @@ def plot_all(results,out):
         ax.set(xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',xlim=(-15,620),ylim=(-180,180));ax.set_aspect('equal');ax.grid(alpha=.12)
         ax.legend(ncol=1,frameon=False,loc='center left',bbox_to_anchor=(1,.5))
         fig.subplots_adjust(right=.72);finish(fig,out,'corridor_top')
-        X,U,t=r['X'],r['U'],r['time'];fig,axes=plt.subplots(3,2,figsize=(10,8),sharex=True)
-        q=[X[:,3],X[:,4]*180/np.pi,X[:,6]*180/np.pi,U[:,0],U[:,1]*180/np.pi,U[:,2]*180/np.pi]
-        labels=[r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'倾侧角 $\phi$ / °',r'速率变化率 $a$ / (m/s$^2$)',r'航迹倾角变化率 $\omega_\gamma$ / (°/s)',r'倾侧角变化率 $\omega_\phi$ / (°/s)']
-        bounds=[(15,25),(-.2*180/np.pi,.2*180/np.pi),(-.6*180/np.pi,.6*180/np.pi),(-2,2),(-.08*180/np.pi,.08*180/np.pi),(-.4*180/np.pi,.4*180/np.pi)]
-        for i,(a,y,l,bd) in enumerate(zip(axes.flat,q,labels,bounds)):
-            if i<3:a.plot(t,y,color=BLUE,lw=1.8)
-            else:a.step(t[:-1],y,where='post',color=BLUE,lw=1.8)
-            a.set_ylabel(l);a.grid(alpha=.15)
-            for b in bd:a.axhline(b,color='.5',ls=':',lw=.8)
-        for a in axes[-1]:a.set_xlabel('时间 $t$ / s')
-        fig.tight_layout();finish(fig,out,'states_inputs')
+        X,U,t=r['X'],r['U'],r['time']
+        fig,axes=plt.subplots(2,2,figsize=(10,5.6),sharex=True)
+        for ax,j,label,bd in zip(axes.flat,[3,4,5,6],
+            [r'速率 $V$ / (m/s)',r'航迹倾角 $\gamma$ / °',r'航迹方位角 $\chi$ / °',r'倾侧角 $\phi$ / °'],
+            [(15,25),(-.2,.2),(-.9,.9),(-.6,.6)]):
+            factor=1 if j==3 else 180/np.pi
+            ax.plot(t,X[:,j]*factor,color=BLUE,lw=1.8);ax.set_ylabel(label);ax.grid(alpha=.15)
+            for bound in bd:ax.axhline(bound*factor,color='.5',ls=':',lw=.8)
+        for ax in axes[-1]:ax.set_xlabel('时间 $t$ / s')
+        fig.tight_layout();finish(fig,out,'states')
+        fig,axes=plt.subplots(1,3,figsize=(10,3.5),sharex=True)
+        for ax,j,label,bound in zip(axes,range(3),
+            [r'速率变化率 $a$ / (m/s$^2$)',r'航迹倾角变化率 $\omega_\gamma$ / (°/s)',r'倾侧角变化率 $\omega_\phi$ / (°/s)'],[2,.08,.4]):
+            factor=1 if j==0 else 180/np.pi
+            ax.step(t,np.r_[U[:,j],U[-1,j]]*factor,where='post',color=BLUE,lw=1.5)
+            for sign in [-1,1]:ax.axhline(sign*bound*factor,color='.5',ls=':',lw=.8)
+            ax.set(xlabel='时间 $t$ / s',ylabel=label);ax.grid(alpha=.15)
+        fig.tight_layout();finish(fig,out,'inputs')
+    if 'five_corridor' in results:
+        r=results['five_corridor'];fig,axes=plt.subplots(1,2,figsize=(10,3.7),gridspec_kw={'width_ratios':[1.35,1]})
+        obstacles2d(axes[0],r['columns'])
+        axes[0].plot(*r['X'][:,:2].T,color=BLUE,lw=2)
+        axes[0].set(xlabel='位置 $x$ / m',ylabel='位置 $y$ / m');axes[0].set_aspect('equal')
+        axes[1].plot(r['time'],r['X'][:,2],color=BLUE,lw=2)
+        axes[1].set(xlabel='时间 $t$ / s',ylabel='高度 $z$ / m')
+        for ax in axes:ax.grid(alpha=.15)
+        fig.tight_layout();finish(fig,out,'five_views')
+    if all(k in results for k in ['four_grid100','four_corridor']):
+        a,b=results['four_grid100'],results['four_corridor'];fig,axes=plt.subplots(1,2,figsize=(10,3.7))
+        obstacles2d(axes[0],b['columns'])
+        for r,col,ls in [(a,WARM,'--'),(b,BLUE,'-')]:
+            axes[0].plot(*r['X'][:,:2].T,color=col,ls=ls,label=f"{r['intervals']}个区间")
+        axes[0].set(xlabel='位置 $x$ / m',ylabel='位置 $y$ / m');axes[0].set_aspect('equal');axes[0].legend(frameon=False)
+        interp=np.column_stack([np.interp(b['time'],a['time'],a['X'][:,j]) for j in range(3)])
+        delta=np.linalg.norm(interp-b['X'][:,:3],axis=1)
+        axes[1].plot(b['time'],delta,color=BLUE);axes[1].set(xlabel='时间 $t$ / s',ylabel='两组离散航迹的位置差 / m')
+        np.savetxt(out/'grid_position_difference.csv',np.c_[b['time'],delta],delimiter=',',header='t,position_difference_m',comments='')
+        for ax in axes:ax.grid(alpha=.15)
+        fig.tight_layout();finish(fig,out,'grid_comparison')
     m=np.array([2,4,10,50,100]);fig,ax=plt.subplots(figsize=(8.8,3.7))
     ax.plot(m,201*m,'o-',color=WARM,label='距离避障：$201M$ 条')
     ax.axhline(1206,color=BLUE,label=r'廊内边界：$6\times201=1206$ 个标量边界')

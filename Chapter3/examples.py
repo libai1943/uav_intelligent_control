@@ -7,10 +7,10 @@ from model import motion
 from figures import style,finish,BLUE,WARM,GRAY
 
 def function(x):
-    return np.tanh(x)+.2*x*np.exp(-.1*x*x)+.3*np.sin(2.5*x)
+    return (x*x-1)**2
 
 def derivative(x):
-    return 1/np.cosh(x)**2+.2*(1-.2*x*x)*np.exp(-.1*x*x)+.75*np.cos(2.5*x)
+    return 4*x*(x*x-1)
 
 def make_examples(out):
     style();out=Path(out);tables=out/'tables';tables.mkdir(parents=True,exist_ok=True)
@@ -40,7 +40,7 @@ def make_examples(out):
     tex[-1]=tex[-1].replace(r'\hline',r'\lastline');tex +=[r'\end{tabularx}\end{table}']
     (tables/'forward_table.tex').write_text('\n'.join(tex),encoding='utf-8')
     if book.is_dir(): (book/'forward_table.tex').write_text('\n'.join(tex),encoding='utf-8')
-    starts=[-6,-3.2,-1,-.2,.05,.8,1.8,2.3,3.14,3.5,4.2,5.5];results=[];traces=[]
+    starts=[-1.6,-.2,.2,1.6];results=[];traces=[]
     for start in starts:
         x=start;trace=[x];count=0
         while abs(derivative(x))>=1e-4 and count<500:
@@ -49,8 +49,8 @@ def make_examples(out):
         results.append(dict(initial=start,solution=x,cost=float(function(x)),iterations=count));traces.append(np.array(trace))
     (out/'gradient_example.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
     fig,axes=plt.subplots(1,2,figsize=(10,4))
-    grid=np.linspace(-6.5,6,1000);axes[0].plot(grid,function(grid),color=GRAY,lw=1.6)
-    for idx,c,ls in [(0,BLUE,'-'),(3,WARM,'--'),(9,'#635b80',':')]:
+    grid=np.linspace(-1.7,1.7,1000);axes[0].plot(grid,function(grid),color=GRAY,lw=1.6)
+    for idx,c,ls in [(0,BLUE,'-'),(1,'#6d908b','--'),(2,WARM,':'),(3,'#635b80','-.')]:
         tr=traces[idx];axes[0].plot(tr[::max(1,len(tr)//10)],function(tr[::max(1,len(tr)//10)]),'o',ms=3,color=c)
         axes[0].plot(tr[0],function(tr[0]),'o',ms=7,mfc='white',mec=c)
         axes[0].plot(tr[-1],function(tr[-1]),'*',ms=10,color=c)

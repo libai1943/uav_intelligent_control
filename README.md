@@ -1,51 +1,46 @@
 # 低空飞行器智能控制技术：教材配套代码
 
-本仓库按章节组织仿真实验。每章有独立的 `RunMe.py`、依赖清单和说明，下载后无需教材源文件即可运行。
+本仓库按章节组织独立教学实验，无需教材的 LaTeX 源文件即可运行。前三章同时提供独立的 Python 和 MATLAB 实现，统一入口分别为 `RunMe.py` 和 `RunMe.m`。第四章现有程序仍使用 Python。
 
 | 目录 | 内容 | 主要输出 |
 | --- | --- | --- |
-| [Chapter2](Chapter2) | PID 控制器及其在低空飞行器高度控制中的应用 | 高度响应、前馈与反馈比较、P/PI/PID 对照、级联控制、CSV 数据及数值核验 |
-| [Chapter3](Chapter3) | 最优控制及其在低空飞行器航迹规划中的应用 | 三维 A* 搜索初始路径、完整初始解、最优航迹、安全走廊碎片、状态与输入曲线及数值核验 |
-| [Chapter4](Chapter4) | 模型预测控制与固定翼航迹跟踪 | 名义输入与闭环对照、5/20/40步预测、反馈更新图、输入约束和CSV结果 |
+| [Chapter1](Chapter1) | 侧风、空速与地速；路径的时间安排 | 四组 CSV、速度向量与参考航迹图 |
+| [Chapter2](Chapter2) | PID 控制器与低空飞行器高度控制 | P/PI/PID、前馈反馈、积分抗饱和、级联控制及 19 组主线数据 |
+| [Chapter3](Chapter3) | 最优控制方法与固定翼航迹规划 | 三维 A* 搜索、完整初始解、八组优化、走廊、状态与输入、独立结果核验 |
+| [Chapter4](Chapter4) | 模型预测控制与固定翼航迹跟踪 | 名义输入与闭环对照、5/20/40 步预测、反馈更新图及 CSV |
 
-## 快速运行
+## 前三章的运行方式
 
-需要 Python 3.10 或更新版本。建议先创建虚拟环境；依赖安装需要联网，实验本身无需联网。
-
-第二章：
+进入对应章节目录，安装该章依赖后运行 Python 入口：
 
 ```bash
-cd Chapter2
 python -m pip install -r requirements.txt
 python RunMe.py
 ```
 
-第三章：
+MATLAB 将当前文件夹切换到同一章节，执行 `RunMe`。第一、二章不需要附加工具箱；第三章需要 CasADi 3.7.2 的 MATLAB 发行包及其附带的 IPOPT，安装方法见 [Chapter3/README.md](Chapter3/README.md)。MATLAB 实现自行计算全部结果，不调用 Python。Windows 上建议将 Python 环境及 CasADi 二进制依赖安装在英文路径。
+
+两种实现都完成后，在章节目录执行：
 
 ```bash
-cd Chapter3
-python -m pip install -r requirements.txt
-python RunMe.py
+python CheckResults.py
 ```
 
-也可以在仓库根目录安装相应依赖后，直接执行 `python Chapter2/RunMe.py` 或 `python Chapter3/RunMe.py`。两章的结果分别保存在 `Chapter2/results/`、`Chapter3/results_kinematic/`，与启动命令时所在目录无关。重复运行会更新同名结果。
+检查脚本比较逐时刻 CSV。第三章还分别重新计算两种语言结果的运动残差、变量边界、目标值、前向重算及线段避障间隔。检查记录写入各章的 JSON 文件。程序可以从其他目录启动，输出路径相对于程序文件确定。
 
-第三章默认运行八组优化实验并生成全部图表。先体验一个四柱走廊算例，可执行：
+| 章节 | Python 输出 | MATLAB 输出 | 核验记录 |
+| --- | --- | --- | --- |
+| 第一章 | `results/` | `results_matlab/` | `validation.json` |
+| 第二章 | `results/` | `results_matlab/` | `results/cross_language_check.json`；随库保存 `cross_language_validation.json` |
+| 第三章 | `results_kinematic/` | `results_matlab/` | `validation.json` |
 
-```bash
-python Chapter3/RunMe.py --case four_corridor
-```
-
-图中文字使用 Microsoft YaHei 或 Noto Sans CJK SC 等中文字体。无中文字体时应先安装字体，否则图片可能缺字。第三章采用 CasADi 自带的 IPOPT 求解器，无需另外安装商业优化软件；LaTeX 表格只是附加输出，运行仿真不需要安装 LaTeX。
+第三章默认完成八组算例。初次体验可运行 `python RunMe.py --case four_corridor`；完整双语言核验需要先完成全部八组。图片采用中文字体，建议安装 Microsoft YaHei 或 Noto Sans CJK SC。生成附加 LaTeX 表格不要求安装 LaTeX。
 
 ## 模型与验证
 
-各章均是教材中的简化模型。第二章模拟近水平多旋翼的竖直运动；第三章采用有 IROS 2021 文献依据的固定翼运动学规划模型，输入为速率变化率、航迹倾角变化率和倾侧角变化率，求解静态障碍环境中的开环规划问题。具体假设、参数、检查阈值、输出格式和修改方法见各章 README。
+第二章采用近水平多旋翼的竖直运动模型；第三章采用固定翼简化运动学规划模型，三路输入为飞行速率、航迹倾角和倾侧角的变化率。每个区间只使用一次显式欧拉更新，第三章没有积分子步或 RK4。详见各章模型、参数与结果说明。
 
-第二章检查有限时间响应、推力范围及采样步长变化。第三章使用单步显式欧拉法，检查离散约束残差、相同离散模型的前向重算和节点间连线的避障间隔；没有区间内积分小步或 RK4。程序保留实验数据及诊断信息，便于核对。数值检查不等于全局最优性证明，也不代表实机验证。这里不包含飞控固件或实机控制接口。
-
-测试记录见 [VALIDATION.md](VALIDATION.md)。本次提供 Python 版本。
-
+2026 年 10 月修订已在 Windows、Python 3.12.14 与 MATLAB R2021b 下实际运行前三章。第一章四份数据、第二章 19 组逐时刻数据、第三章八个优化算例均通过独立核验。第三章修正了走廊边界数组使用整数类型导致小数截断的问题，结果已经重新生成。测试记录见 [VALIDATION.md](VALIDATION.md)。这些程序用于数值教学，不含飞控固件或实机控制接口。
 
 ## 第四章：模型预测控制
 

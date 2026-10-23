@@ -2,21 +2,14 @@
 import os
 for key in ('OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','OMP_NUM_THREADS'):os.environ.setdefault(key,'1')
 from pathlib import Path
-import argparse,json,time,sys
+import argparse,json,time,sys,platform
 import numpy as np
 import casadi as ca
 from model import PAR,motion,symbolic_motion,forward_euler
 from geometry import astar_3d,spline_seed,build_corridors,box_clearance,segment_clearance
 ROOT=Path(__file__).resolve().parent
-CFG=dict(intervals=200,fragment_steps=10,duration_s=36.,safety_margin_m=8.,astar_extra_clearance_m=30.,
- grid_step_m=[20,20,10],search_lower_m=[0,-220,80],search_upper_m=[600,220,180],
- state_lower=[-30,-220,75,15,-.2,-.9,-.6],state_upper=[650,220,180,25,.2,.9,.6],
- input_lower=[-2,-.08,-.4],input_upper=[2,.08,.4],start_state=[0,0,100,20,0,0,0],
- corridor_node_buffer_m=3.)
-SCENES={
- 'two':dict(columns=[[250,0,55],[430,-10,45]],goal=[600,0,130,20,0,0,0]),
- 'four':dict(columns=[[180,-30,32],[270,15,35],[360,-35,32],[450,20,30]],goal=[600,0,150,20,0,0,0]),
- 'five':dict(columns=[[150,65,28],[225,-65,28],[300,70,30],[375,-65,28],[450,65,28]],goal=[600,0,160,20,0,0,0])}
+SETTINGS=json.loads((ROOT/'config.json').read_text(encoding='utf-8'))
+CFG,SCENES=SETTINGS['config'],SETTINGS['scenes']
 
 def inverse_seed(p,dt):
     v=np.gradient(p,dt,axis=0,edge_order=2);V=np.linalg.norm(v,axis=1)
@@ -43,6 +36,7 @@ class Problem:
             a,ea=astar_3d(start[:3],point,self.obs,self.cfg);b,eb=astar_3d(point,goal[:3],self.obs,self.cfg)
             self.raw=np.vstack((a,b[1:]));self.expanded=ea+eb
         p,self.spline,self.knots,self.spline_clearance=spline_seed(self.raw,self.obs,self.cfg)
+        self.seed_average_speed=float(np.sum(np.linalg.norm(np.diff(self.spline,axis=0),axis=1))/CFG['duration_s'])
         if seed_kind=='straight':p=np.linspace(start[:3],goal[:3],self.M);self.spline=p.copy()
         X,U=inverse_seed(p,self.dt);X[0],X[-1]=start,goal
         lx=np.tile(CFG['state_lower'],(self.M,1)).astype(float);hx=np.tile(CFG['state_upper'],(self.M,1)).astype(float)
@@ -69,7 +63,7 @@ class Problem:
         gs=[eq];lbg=[np.zeros(7*self.N)];ubg=[np.zeros(7*self.N)]
         if not self.corridor:
             for cx,cy,r in self.obs:
-                dist=((X[0,:]-cx)**2+(X[1,:]-cy)**2)/(r+11)**2-1
+                dist=((X[0,:]-cx)**2+(X[1,:]-cy)**2)/(r+CFG['safety_margin_m']+CFG['corridor_node_buffer_m'])**2-1
                 gs.append(ca.vec(dist));lbg.append(np.zeros(self.M));ubg.append(np.full(self.M,np.inf))
         g=ca.vertcat(*gs);gf=ca.Function('g',[z],[g]);of=ca.Function('J',[z],[J])
         jf=ca.Function('derivatives',[z],[ca.jacobian(g,z)]);grad=ca.Function('grad',[z],[ca.gradient(J,z)])
@@ -95,7 +89,7 @@ class Problem:
           nonlinear_obstacle_constraints=0 if self.corridor else len(self.obs)*self.M,
           position_box_bounds=6*self.M if self.corridor else 0,X=XX,U=UU,initial_X=X0,initial_U=U0,
           time=np.arange(self.M)*self.dt,history=history,dense=dense,raw=self.raw,spline=self.spline,
-          knots=self.knots,boxes=self.boxes,owner=self.owner,columns=self.obs,astar_expanded=self.expanded)
+          seed_average_speed_m_s=self.seed_average_speed,knots=self.knots,boxes=self.boxes,owner=self.owner,columns=self.obs,astar_expanded=self.expanded)
 
     def validate(self,X,U,residual):
         # DISCRETE model consistency only, not full-aircraft/continuous validation.
@@ -111,6 +105,7 @@ class Problem:
                 bv=max(bv,float(np.max(box[:3]-d)),float(np.max(d-box[3:])))
         checks=dict(max_scaled_constraint_violation=float(residual),
           min_discrete_segment_clearance_m=float(clear),
+          remaining_geometric_margin_m=float(clear-CFG['safety_margin_m']),
           terminal_position_error_m=float(np.linalg.norm(terminal[:3])),
           terminal_speed_error_m_s=float(abs(terminal[3])),
           terminal_direction_error_deg=float(np.max(np.abs(np.rad2deg(terminal[4:6])))),
@@ -130,9 +125,27 @@ def save(r,folder):
     np.savez_compressed(folder/'data.npz',**{k:v for k,v in r.items() if isinstance(v,np.ndarray)})
     np.savetxt(folder/'state.csv',np.c_[r['time'],r['X']],delimiter=',',header='t,x,y,z,V,gamma,chi,phi',comments='')
     np.savetxt(folder/'control.csv',np.c_[r['time'][:-1],r['U']],delimiter=',',header='t,a,omega_gamma,omega_phi',comments='')
+    np.savetxt(folder/'initial_state.csv',np.c_[r['time'],r['initial_X']],delimiter=',',header='t,x,y,z,V,gamma,chi,phi',comments='')
+    np.savetxt(folder/'initial_control.csv',np.c_[r['time'][:-1],r['initial_U']],delimiter=',',header='t,a,omega_gamma,omega_phi',comments='')
+    np.savetxt(folder/'raw_path.csv',r['raw'],delimiter=',',header='x,y,z',comments='')
+    np.savetxt(folder/'boxes.csv',r['boxes'],delimiter=',',header='xmin,ymin,zmin,xmax,ymax,zmax',comments='')
+
+def environment():
+    # IPOPT version is emitted by the solver banner; keep package provenance too.
+    info=dict(os=platform.platform(),machine=platform.machine(),processor=platform.processor(),
+              python=platform.python_version(),casadi=ca.__version__,
+              numpy=np.__version__,deterministic=True,random_initialization=False,
+              threads={k:os.environ.get(k) for k in ('OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','OMP_NUM_THREADS')},
+              solver='IPOPT bundled with CasADi '+ca.__version__)
+    if os.name=='nt':
+        import winreg
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,r'HARDWARE\DESCRIPTION\System\CentralProcessor\0') as k:
+            info['cpu']=winreg.QueryValueEx(k,'ProcessorNameString')[0].strip()
+    return info
+
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--case',default='all');ap.add_argument('--plots-only',action='store_true');ap.add_argument('--no-plots',action='store_true');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--case',default='all',choices=['all','two_straight','two_north','two_south','two_corridor','four_direct','four_corridor','five_corridor','four_grid100']);ap.add_argument('--plots-only',action='store_true');ap.add_argument('--no-plots',action='store_true');args=ap.parse_args()
     out=ROOT/'results_kinematic';out.mkdir(exist_ok=True)
     jobs=[('two_straight','two','straight',False,200),('two_north','two','north',False,200),
       ('two_south','two','south',False,200),('two_corridor','two','astar',True,200),
@@ -149,7 +162,7 @@ def main():
         results[name]=r
     report=[{k:v for k,v in r.items() if not isinstance(v,np.ndarray)} for r in results.values()]
     (out/'summary.json').write_text(json.dumps(dict(config=CFG,aircraft=PAR,scenes=SCENES,python=sys.version,
-        casadi=ca.__version__,results=report),ensure_ascii=False,indent=2),encoding='utf-8')
+        casadi=ca.__version__,environment=environment(),results=report),ensure_ascii=False,indent=2),encoding='utf-8')
     if not args.no_plots:
         from examples import make_examples
         make_examples(out)

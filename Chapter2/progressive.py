@@ -58,8 +58,20 @@ def generate():
     assert abs(metrics['stage_pid']['final_2s_mean_error_m'])<.003
 
 
-    compare([results['stage_p'],results['stage_no_drag']],['有竖直阻尼','忽略竖直阻尼'],
-            'stage1_p',xlim=(0,14))
+    fig,axs=plt.subplots(3,1,figsize=(7,6.2),sharex=True,layout='constrained')
+    axs[0].axhline(3,color='#888',ls=':',lw=1,label='参考高度')
+    for i,(key,label) in enumerate([('stage_p','有竖直阻尼'),('stage_no_drag','忽略竖直阻尼')]):
+        dd=results[key]
+        for ax,col in zip(axs,[2,3,7]):
+            ax.plot(dd[:,0],dd[:,col],color=r.C[i],ls=r.LS[i],label=label)
+    ix=np.flatnonzero(d[:,2]>=3)[0];tc=d[ix,0];vc=d[ix,3]
+    for ax in axs:ax.axvline(tc,color='#aaa',lw=.8,ls=':');ax.set_xlim(0,14)
+    axs[1].plot(tc,vc,'o',color=r.C[0],ms=3)
+    axs[1].annotate('首次到达参考高度时仍向上运动',xy=(tc,vc),xytext=(4.0,.9),
+                    fontsize=9,arrowprops=dict(arrowstyle='->',lw=.7,color='#555'))
+    axs[0].legend(ncol=3,frameon=False,fontsize=9,loc='lower center',bbox_to_anchor=(.5,1.01))
+    for ax,lab in zip(axs,['高度 $h$ / m','速度 $v_z$ / (m/s)','总推力 $T$ / N']):ax.set_ylabel(lab)
+    axs[-1].set_xlabel('时间 $t$ / s');r.finish(fig,'stage1_p')
     compare([results['stage_p_wind'],results['stage_p8_wind']],['P：$K_p=4$','P：$K_p=8$'],
             'stage2_bias',wind=True)
     fig,axs=plt.subplots(2,1,figsize=(7,4.65),sharex=True,layout='constrained')

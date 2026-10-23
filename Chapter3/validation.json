@@ -1,395 +1,143 @@
 {
-  "config": {
-    "intervals": 200,
-    "fragment_steps": 10,
-    "duration_s": 36.0,
-    "safety_margin_m": 8.0,
-    "astar_extra_clearance_m": 30.0,
-    "grid_step_m": [
-      20,
-      20,
-      10
-    ],
-    "search_lower_m": [
-      0,
-      -220,
-      80
-    ],
-    "search_upper_m": [
-      600,
-      220,
-      180
-    ],
-    "state_lower": [
-      -30,
-      -220,
-      75,
-      15,
-      -0.2,
-      -0.9,
-      -0.6
-    ],
-    "state_upper": [
-      650,
-      220,
-      180,
-      25,
-      0.2,
-      0.9,
-      0.6
-    ],
-    "input_lower": [
-      -2,
-      -0.08,
-      -0.4
-    ],
-    "input_upper": [
-      2,
-      0.08,
-      0.4
-    ],
-    "start_state": [
-      0,
-      0,
-      100,
-      20,
-      0,
-      0,
-      0
-    ],
-    "corridor_node_buffer_m": 3.0
-  },
-  "aircraft": {
-    "g": 9.81,
-    "model": "rate-input Dubins airplane",
-    "z_positive": "up"
-  },
-  "scenes": {
-    "two": {
-      "columns": [
-        [
-          250,
-          0,
-          55
-        ],
-        [
-          430,
-          -10,
-          45
-        ]
-      ],
-      "goal": [
-        600,
-        0,
-        130,
-        20,
-        0,
-        0,
-        0
-      ]
-    },
-    "four": {
-      "columns": [
-        [
-          180,
-          -30,
-          32
-        ],
-        [
-          270,
-          15,
-          35
-        ],
-        [
-          360,
-          -35,
-          32
-        ],
-        [
-          450,
-          20,
-          30
-        ]
-      ],
-      "goal": [
-        600,
-        0,
-        150,
-        20,
-        0,
-        0,
-        0
-      ]
-    },
-    "five": {
-      "columns": [
-        [
-          150,
-          65,
-          28
-        ],
-        [
-          225,
-          -65,
-          28
-        ],
-        [
-          300,
-          70,
-          30
-        ],
-        [
-          375,
-          -65,
-          28
-        ],
-        [
-          450,
-          65,
-          28
-        ]
-      ],
-      "goal": [
-        600,
-        0,
-        160,
-        20,
-        0,
-        0,
-        0
-      ]
-    }
-  },
-  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
-  "casadi": "3.7.2",
+  "passed": true,
+  "scope": "8 independent MATLAB/Python single-step Euler OCPs plus forward and gradient illustrations",
+  "criterion": "Each language independently passes physical/normalized checks; then CSV comparison",
   "results": [
     {
-      "scene": "two",
-      "seed_kind": "straight",
-      "corridor": false,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.4758606685394859,
-      "iterations": 32,
-      "seconds": 0.24277649994473904,
-      "checks": {
-        "max_scaled_constraint_violation": 7.260858581048524e-13,
-        "min_discrete_segment_clearance_m": 10.991726862793513,
-        "terminal_position_error_m": 8.06895703740819e-09,
-        "terminal_speed_error_m_s": 2.1316282072803006e-14,
-        "terminal_direction_error_deg": 2.411238884860273e-10,
-        "terminal_bank_error_deg": 1.7890620083232284e-15,
-        "max_node_reconstruction_error_m": 8.07247135404303e-09,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0
+      "case": "two_straight",
+      "python": {
+        "eta": 7.260121323571234e-13,
+        "objective": 0.4758606685394858,
+        "min_segment_clearance_m": 10.991726862793513,
+        "reconstruction_position_error_m": 8.07247135404303e-09
       },
-      "derivative_check_max_error": 7.2004411322268425e-09,
-      "initial_max_scaled_defect": 0.16652798573983385,
-      "nonlinear_obstacle_constraints": 402,
-      "position_box_bounds": 0,
-      "astar_expanded": 2059
+      "matlab": {
+        "eta": 7.259687642702239e-13,
+        "objective": 0.47586066853948616,
+        "min_segment_clearance_m": 10.99172686279364,
+        "reconstruction_position_error_m": 8.072054044596958e-09
+      },
+      "max_state_csv_difference": 7.389644451905042e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     },
     {
-      "scene": "two",
-      "seed_kind": "north",
-      "corridor": false,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.4758606685394783,
-      "iterations": 20,
-      "seconds": 0.1484640000271611,
-      "checks": {
-        "max_scaled_constraint_violation": 7.259008209340816e-13,
-        "min_discrete_segment_clearance_m": 10.991726862797279,
-        "terminal_position_error_m": 8.065202130663515e-09,
-        "terminal_speed_error_m_s": 2.4868995751603507e-14,
-        "terminal_direction_error_deg": 2.411028670074295e-10,
-        "terminal_bank_error_deg": 1.987846675914698e-15,
-        "max_node_reconstruction_error_m": 8.068928753832064e-09,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0
+      "case": "two_north",
+      "python": {
+        "eta": 7.259268417862212e-13,
+        "objective": 0.47586066853947834,
+        "min_segment_clearance_m": 10.991726862797279,
+        "reconstruction_position_error_m": 8.068928753832064e-09
       },
-      "derivative_check_max_error": 9.688221780379536e-09,
-      "initial_max_scaled_defect": 0.467764728614161,
-      "nonlinear_obstacle_constraints": 402,
-      "position_box_bounds": 0,
-      "astar_expanded": 879
+      "matlab": {
+        "eta": 7.255943531199923e-13,
+        "objective": 0.4758606685394759,
+        "min_segment_clearance_m": 10.991726862797002,
+        "reconstruction_position_error_m": 8.069159901617728e-09
+      },
+      "max_state_csv_difference": 6.821210263296962e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     },
     {
-      "scene": "two",
-      "seed_kind": "south",
-      "corridor": false,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.6080470935198967,
-      "iterations": 18,
-      "seconds": 0.1357527999789454,
-      "checks": {
-        "max_scaled_constraint_violation": 3.547162563677375e-13,
-        "min_discrete_segment_clearance_m": 10.998042414678288,
-        "terminal_position_error_m": 2.768618575494554e-09,
-        "terminal_speed_error_m_s": 2.1316282072803006e-14,
-        "terminal_direction_error_deg": 1.7336930239739692e-11,
-        "terminal_bank_error_deg": 6.1623246953355635e-15,
-        "max_node_reconstruction_error_m": 2.77067718423737e-09,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0
+      "case": "two_south",
+      "python": {
+        "eta": 3.546779478909764e-13,
+        "objective": 0.6080470935198967,
+        "min_segment_clearance_m": 10.998042414678288,
+        "reconstruction_position_error_m": 2.77067718423737e-09
       },
-      "derivative_check_max_error": 2.134697751898784e-09,
-      "initial_max_scaled_defect": 0.7474053282153855,
-      "nonlinear_obstacle_constraints": 402,
-      "position_box_bounds": 0,
-      "astar_expanded": 813
+      "matlab": {
+        "eta": 3.5471697916918587e-13,
+        "objective": 0.6080470935198945,
+        "min_segment_clearance_m": 10.998042414678196,
+        "reconstruction_position_error_m": 2.7709671225735537e-09
+      },
+      "max_state_csv_difference": 7.531752999057062e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     },
     {
-      "scene": "two",
-      "seed_kind": "astar",
-      "corridor": true,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.6875093699242004,
-      "iterations": 15,
-      "seconds": 0.09295320004457608,
-      "checks": {
-        "max_scaled_constraint_violation": 5.551115123125783e-16,
-        "min_discrete_segment_clearance_m": 26.66320421166664,
-        "terminal_position_error_m": 2.782365543838309e-12,
-        "terminal_speed_error_m_s": 1.0658141036401503e-14,
-        "terminal_direction_error_deg": 5.257357496125397e-13,
-        "terminal_bank_error_deg": 1.4710065401768764e-14,
-        "max_node_reconstruction_error_m": 2.8088044987923955e-12,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0,
-        "whole_box_clearance_m": 8.077842940914458
+      "case": "two_corridor",
+      "python": {
+        "eta": 1.0784197608989152e-15,
+        "objective": 0.6948236123770754,
+        "min_segment_clearance_m": 27.530833909024764,
+        "reconstruction_position_error_m": 4.7173697480472895e-12
       },
-      "derivative_check_max_error": 1.961961260120131e-10,
-      "initial_max_scaled_defect": 0.6083530839414051,
-      "nonlinear_obstacle_constraints": 0,
-      "position_box_bounds": 1206,
-      "astar_expanded": 2059
+      "matlab": {
+        "eta": 6.431892055995073e-15,
+        "objective": 0.694823612377072,
+        "min_segment_clearance_m": 27.530833909024352,
+        "reconstruction_position_error_m": 4.9470849115988755e-12
+      },
+      "max_state_csv_difference": 1.0231815394945443e-12,
+      "max_control_csv_difference": 8.548717289613705e-15
     },
     {
-      "scene": "four",
-      "seed_kind": "astar",
-      "corridor": false,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.874780455055269,
-      "iterations": 22,
-      "seconds": 0.1957338000065647,
-      "checks": {
-        "max_scaled_constraint_violation": 1.3722356584366935e-12,
-        "min_discrete_segment_clearance_m": 10.96776236698011,
-        "terminal_position_error_m": 1.230312145021733e-08,
-        "terminal_speed_error_m_s": 4.263256414560601e-14,
-        "terminal_direction_error_deg": 8.33798908873071e-10,
-        "terminal_bank_error_deg": 2.3854160110976376e-15,
-        "max_node_reconstruction_error_m": 1.2596582341159623e-08,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0
+      "case": "four_direct",
+      "python": {
+        "eta": 1.3722139743932438e-12,
+        "objective": 0.874780455055269,
+        "min_segment_clearance_m": 10.96776236698011,
+        "reconstruction_position_error_m": 1.2596582341159623e-08
       },
-      "derivative_check_max_error": 1.2138286820118083e-08,
-      "initial_max_scaled_defect": 0.8818389105347723,
-      "nonlinear_obstacle_constraints": 804,
-      "position_box_bounds": 0,
-      "astar_expanded": 1793
+      "matlab": {
+        "eta": 1.3719899059442635e-12,
+        "objective": 0.8747804550552681,
+        "min_segment_clearance_m": 10.96776236698036,
+        "reconstruction_position_error_m": 1.259641963606741e-08
+      },
+      "max_state_csv_difference": 6.252776074688882e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     },
     {
-      "scene": "four",
-      "seed_kind": "astar",
-      "corridor": true,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 1.2876097249151028,
-      "iterations": 15,
-      "seconds": 0.0890961000113748,
-      "checks": {
-        "max_scaled_constraint_violation": 3.3306690738754696e-14,
-        "min_discrete_segment_clearance_m": 27.636446543293957,
-        "terminal_position_error_m": 2.6220340827832057e-10,
-        "terminal_speed_error_m_s": 7.105427357601002e-15,
-        "terminal_direction_error_deg": 2.9236602859183704e-11,
-        "terminal_bank_error_deg": 5.9635400277440935e-15,
-        "max_node_reconstruction_error_m": 2.6220340827832057e-10,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0,
-        "whole_box_clearance_m": 8.085331824415874
+      "case": "four_corridor",
+      "python": {
+        "eta": 2.49713880171103e-13,
+        "objective": 1.2958484796316867,
+        "min_segment_clearance_m": 28.09819273541394,
+        "reconstruction_position_error_m": 1.0742666070114294e-09
       },
-      "derivative_check_max_error": 4.415835822002556e-10,
-      "initial_max_scaled_defect": 0.8818389105347723,
-      "nonlinear_obstacle_constraints": 0,
-      "position_box_bounds": 1206,
-      "astar_expanded": 1793
+      "matlab": {
+        "eta": 2.501184495006664e-13,
+        "objective": 1.2958484796316885,
+        "min_segment_clearance_m": 28.098192735414102,
+        "reconstruction_position_error_m": 1.0742998344549505e-09
+      },
+      "max_state_csv_difference": 6.394884621840902e-13,
+      "max_control_csv_difference": 8.104628079763643e-15
     },
     {
-      "scene": "five",
-      "seed_kind": "astar",
-      "corridor": true,
-      "intervals": 200,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 0.8153970538127292,
-      "iterations": 19,
-      "seconds": 0.11415759997908026,
-      "checks": {
-        "max_scaled_constraint_violation": 1.826653411862722e-10,
-        "min_discrete_segment_clearance_m": 17.342370194802186,
-        "terminal_position_error_m": 1.5500296896121554e-06,
-        "terminal_speed_error_m_s": 3.552713678800501e-15,
-        "terminal_direction_error_deg": 5.1688930944270475e-08,
-        "terminal_bank_error_deg": 1.7393658414253607e-16,
-        "max_node_reconstruction_error_m": 1.5500296896121554e-06,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0,
-        "whole_box_clearance_m": 8.084138358888133
+      "case": "five_corridor",
+      "python": {
+        "eta": 1.0258386732668138e-13,
+        "objective": 0.8151732414831542,
+        "min_segment_clearance_m": 16.778113140894,
+        "reconstruction_position_error_m": 3.05771072588999e-09
       },
-      "derivative_check_max_error": 1.9415451191218125e-09,
-      "initial_max_scaled_defect": 0.6531903342355393,
-      "nonlinear_obstacle_constraints": 0,
-      "position_box_bounds": 1206,
-      "astar_expanded": 1018
+      "matlab": {
+        "eta": 1.0263641788318031e-13,
+        "objective": 0.8151732414831565,
+        "min_segment_clearance_m": 16.778113140893907,
+        "reconstruction_position_error_m": 3.0579215242258605e-09
+      },
+      "max_state_csv_difference": 8.526512829121202e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     },
     {
-      "scene": "four",
-      "seed_kind": "astar",
-      "corridor": true,
-      "intervals": 100,
-      "solver_success": true,
-      "accepted": true,
-      "message": "Solve_Succeeded",
-      "objective": 1.1812279513969621,
-      "iterations": 15,
-      "seconds": 0.04896559996996075,
-      "checks": {
-        "max_scaled_constraint_violation": 2.7755575615628914e-15,
-        "min_discrete_segment_clearance_m": 27.51902144451696,
-        "terminal_position_error_m": 1.1811427251956281e-11,
-        "terminal_speed_error_m_s": 7.105427357601002e-15,
-        "terminal_direction_error_deg": 1.318936269469402e-12,
-        "terminal_bank_error_deg": 7.156248033292914e-15,
-        "max_node_reconstruction_error_m": 1.1811427251956281e-11,
-        "max_discrete_corridor_violation_m": 0.0,
-        "discrete_state_bound_violation": 0.0,
-        "whole_box_clearance_m": 8.085331824415874
+      "case": "four_grid100",
+      "python": {
+        "eta": 2.746645503629945e-15,
+        "objective": 1.188134354846618,
+        "min_segment_clearance_m": 27.985501170919655,
+        "reconstruction_position_error_m": 1.0846003096072267e-11
       },
-      "derivative_check_max_error": 3.1249308696246203e-10,
-      "initial_max_scaled_defect": 0.8986758257679952,
-      "nonlinear_obstacle_constraints": 0,
-      "position_box_bounds": 606,
-      "astar_expanded": 1793
+      "matlab": {
+        "eta": 6.396364919207069e-15,
+        "objective": 1.188134354846622,
+        "min_segment_clearance_m": 27.98550117091962,
+        "reconstruction_position_error_m": 1.1056695537620986e-11
+      },
+      "max_state_csv_difference": 9.805489753489383e-13,
+      "max_control_csv_difference": 2.4202861936828413e-14
     }
   ]
 }

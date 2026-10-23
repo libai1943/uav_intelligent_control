@@ -1,83 +1,65 @@
-# 第三章：固定翼无人机开环航迹规划
+# 第三章：最优控制与固定翼航迹规划
 
-更新日期：2026-10-19
+七状态简化运动学规划模型，状态顺序为 `x,y,z,V,gamma,chi,phi`，输入为 `a,omega_gamma,omega_phi`。高度 z 向上，所有程序内部角度使用弧度。每个控制区间只执行一次显式欧拉更新。模型适用于本章说明的近水平、无风、正常飞行规划近似。
 
-## 运行
-  python -m pip install -r requirements.txt
-  python RunMe.py
-Python 3.10+；实测 Windows、Python 3.12.14、CasADi 3.7.2/IPOPT。
-默认执行8组规划和两个入门例子，保存results_kinematic/中的JSON、CSV、NPZ、PDF和PNG。
-单例：python RunMe.py --case four_corridor
-已有结果重画：python RunMe.py --plots-only
-不画图：python RunMe.py --no-plots
-需要Microsoft YaHei或Noto Sans CJK SC字体。代码无飞控接口，不访问网络。
+## Python
 
-## 模型依据及范围
-IROS 2021论文“Embedded Hardware Appropriate Fast 3D Trajectory Optimization for
-Fixed Wing Aerial Vehicles by Leveraging Hidden Convex Structures”，第II-B节式(1)、(2)：
-https://arxiv.org/pdf/2109.12609
-DOI: 10.1109/IROS51168.2021.9636337
-该论文采用forward acceleration、flight-path angle rate、bank angle rate作为输入。
-本例采用相同运动学关系，竖直坐标改为向上，heading符号改为chi。
-采用自己的单步Euler全联立/IPOPT和AABB算例，不是复现论文的交替最小化求解算法。
-模型背景：Owen、Beard、McLain，Implementing Dubins Airplane Paths on Fixed-wing UAVs，2014。
-https://www.et.byu.edu/~beard/papers/preprints/BeardMcLain__.pdf
-该规划模型依赖较低层飞控的跟踪能力，不包含完整气动、发动机和姿态内环。
-本例限定无风、忽略侧滑、较小爬升角的正常飞行。转向式为近水平协调转弯近似。
-不同飞行任务会采用不同模型；此处不声称所有固定翼研究都采用同一个模型。
+建议 Python 3.10–3.12，在虚拟环境安装依赖后运行：
 
-## 状态与输入（全部采用SI单位，角度为弧度）
-x=[x,y,z,V,gamma,chi,phi]：位置、速率、航迹倾角、航迹方位角、倾侧角。
-u=[a,omega_gamma,omega_phi]：速率变化率、航迹倾角变化率、倾侧角变化率。
-xdot=V*cos(gamma)*cos(chi)；ydot=V*cos(gamma)*sin(chi)；zdot=V*sin(gamma)。
-Vdot=a；gammadot=omega_gamma；chidot=g*tan(phi)/V；phidot=omega_phi。
-a是切向加速度分量，并非总加速度大小或推力。输入是规划层等效指令。
-不强制保持高度；竖直加速度为a*sin(gamma)+V*cos(gamma)*omega_gamma。
+```text
+python -m pip install -r requirements.txt
+python RunMe.py
+```
 
-## 离散与求解
-36秒、200个控制区间、201个状态点，dt=0.18秒。
-每个区间只执行一次显式Euler更新：X[k+1]=X[k]+dt*f(X[k],U[k])。
-没有区间内小步或RK4。重算输入也采用完全相同的单步更新。
-7*(N+1)+3*N个标量决策量，起终14个状态分量固定。
-代价为dt*sum(0.3*(a/2)^2+(omega_gamma/0.08)^2+(omega_phi/0.4)^2)。
-这是机动变化率代价，不是真实能源消耗。
-CasADi自动微分；选18个坐标用有限差分检查导数，误差要求<3e-5。
-IPOPT主要容差1e-8，最多700次迭代；计时仅含优化调用。
-时间不包含搜索、模型/导数构造、检查和绘图，不是实时性能保证。
+输出到 `results_kinematic/`。可用 `python RunMe.py --case four_corridor` 单独运行一组；全部默认结果已存在时可用 `--plots-only` 重画图。`--no-plots` 只计算和保存数据。
 
-## 完整初始解
-三维26邻接A*搜索算法，检查每条连接线段；样条平滑后再次检查障碍。
-按累计弧长近似均匀取点并分配到固定时间网格，形成位置时间序列。
-由位置求导恢复V、gamma、chi，先处理chi的周期跳变。
-phi=atan(V*chi_dot/g)，再求a=Vdot、omega_gamma=gammadot、omega_phi=phidot。
-补齐所有状态和输入，修正起终边界与变量范围，并记录初始运动残差。
-完整初始解不意味着全部约束已经满足。
+Windows 下建议将 Python 虚拟环境安装在不含中文的路径，例如 `C:/venvs/uav`。CasADi 3.7.2 的部分 DLL 通过非 Unicode 接口加载，依赖安装目录含中文时可能报 `Plugin ipopt is not found`。教材代码和结果目录本身可以使用中文路径。
+
+## MATLAB（独立实现）
+
+已在 MATLAB R2021b 和 CasADi 3.7.2 Windows MATLAB 工具包上实跑。该实现不调用 Python，也不需要 Optimization Toolbox；非线性求解使用 CasADi 随附的 IPOPT。
+
+1. 从 [CasADi 官方下载页面](https://web.casadi.org/get/) 选择对应操作系统的 MATLAB 工具包。实测包为 `casadi-3.7.2-windows64-matlab2018b`，兼容 R2021b。
+2. 解压到英文路径，将含 `+casadi` 的目录加入 MATLAB 路径；或设置环境变量 `CASADI_MATLAB_PATH` 指向该目录。
+3. 进入本章目录，执行 `RunMe`。单组运行示例：`RunMe('four_corridor')`。
+
+输出到 `results_matlab/`。`matlab/` 中的搜索、样条、反解、优化、检查和绘图均为 MATLAB 自己执行。
 
 ## 八组实验
-two_straight / two_north / two_south：双柱，同一任务的三种完整初始解。
-two_corridor：双柱走廊；four_direct / four_corridor：四柱的距离/走廊对比。
-five_corridor：五柱走廊；four_grid100：四柱走廊100区间。
-本次8组均实际运行通过离散模型检查。非凸求解没有全局最优性保证。
-examples.py还生成线性时变输入的前向计算与一维多极值梯度下降例子。
 
-## 几何与检查
-机体包络及安全间隔合计8米；距离约束节点另留3米。
-走廊盒体整体距物理柱面至少8米，优化节点再距盒面3米。
-速率内部边界收紧0.15 m/s，三个角度内部收紧0.02 rad。
-20个走廊碎片，交界点用相邻盒交集；构造失败或交集空会明确报错。
-accepted要求求解器成功且以下检查通过：
-尺度化离散约束违反量<1e-6；节点重算位置差及终端位置差<1e-3 m；
-终端速率/角度分量差<1e-5（SI）；状态与走廊边界违反量<1e-4；
-相邻位置节点整段连线到柱面的间隔>=8 m。
-终端位置、速率、航迹方向、倾侧角偏差分别保存，不混合量纲。
-这些是离散模型内部一致性与几何检查，不检验连续积分精度，不是实机安全证明。
-一阶Euler误差可累积；真实连续运动、气动包络和闭环跟踪另需验证。
+|编号|内容|
+|---|---|
+|two_straight|双柱，直连初始解，直接距离约束|
+|two_north|双柱，北侧初始解，直接距离约束|
+|two_south|双柱，南侧初始解，直接距离约束|
+|two_corridor|双柱，安全走廊，200区间|
+|four_direct|四柱，直接距离约束，200区间|
+|four_corridor|四柱，安全走廊，200区间|
+|five_corridor|五柱，安全走廊，200区间|
+|four_grid100|四柱，安全走廊，100区间|
 
-## 结果文件
-summary.json：本次参数、环境版本、场景及结果。
-各算例/result.json：成功、迭代、时间、代价、残差及各项终端偏差。
-data.npz：完整优化解、初始解、路径、走廊与迭代数据。
-state.csv：t,x,y,z,V,gamma,chi,phi；control.csv：t,a,omega_gamma,omega_phi。
-每行control在随后一个区间内保持；绘图将部分角度转换为度。
-results_kinematic/tables/中的LaTeX表由已保存实算结果生成。
-若教材目录中的chapter3_figures/已经存在，同时更新其中的同名表格。
+另有时变输入前向模拟与四组双谷函数梯度下降示例。两套实现共用 `config.json`；改变柱体或起终状态后应重新运行，不能拿旧结果核验新配置。当前 A* 网格要求搜索端点位于网格上。
+
+## 初始解与安全走廊
+
+三维 A* 使用26邻域、欧氏边长和启发函数，检查整条连接边。搜索折线经可见性删点、夹持三次样条和平滑安全检查后，按近似均匀弧长配到等时间网格。有限差分恢复全部状态和输入，端点采用三点单侧差分、内部采用中心差分，方位角求导前展开周期跳变。边界修正可能造成运动残差，优化器负责恢复连接一致性。
+
+走廊共20段，时间分界对齐配置节点，共同节点属于相邻盒的交集。种子盒外扩 `[2,2,8]` 米；每面按2米步长尝试，最大扩张范围 `[34,40,18]` 米，最多26轮。盒体须与原始柱面保持超过8.05米的间隔，优化位置距盒面再保留3米。数组使用浮点类型，避免小数边界被截断。
+
+## 结果和自动核验
+
+每组保存 `state.csv`、`control.csv`、`initial_state.csv`、`initial_control.csv`、`raw_path.csv`、`boxes.csv`、`result.json` 以及可供重画图的数组文件。角度、角速度在 CSV 中保持弧度制。
+
+两种语言全部运行后执行：
+
+```text
+python CheckResults.py
+```
+
+脚本从 CSV 重新计算运动残差、变量边界、距离约束、目标值、同一步长的前向运动、终端误差和线段间隔，而非只读取成功标志。每种语言先独立通过检查，再比较两者的初始解、状态与输入。默认配置要求状态 CSV 差小于 `2e-6`、输入 CSV 差小于 `2e-7`、目标差小于 `1e-8`，结果写入 `validation.json`。
+
+尺度化残差使用状态尺度 `[600,150,150,20,.3,.6,.6]` 与输入尺度 `[2,.08,.4]`。等式取绝对值，距离不等式取违反部分，缩放变量边界取越界部分，最终取最大值。阈值 `1e-6` 是当前数值问题的检查要求。最小间隔指节点连线至原始柱面的净距离，尚未扣除8米包络与安全间隔。
+
+迭代图中的 `inf_pr` 是 IPOPT 自身的原始约束不可行度历史，与求解后独立计算的完整残差指标分开记录。计时只覆盖求解调用，预处理、自动微分检查和绘图不计入。相同数据上的两种语言耗时不应视为严格性能基准。
+
+前向核对检查同一单步欧拉离散模型的内部一致性，不证明连续积分精度或实机飞行安全。源程序没有飞控硬件接口。

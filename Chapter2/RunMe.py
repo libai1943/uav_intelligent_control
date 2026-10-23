@@ -270,6 +270,9 @@ def main():
     intro = generate(OUT, results, simulate, Case, save_series, finish)
     from progressive import generate as generate_progressive
     progressive = generate_progressive()
+    from revision_experiments import generate as generate_revision
+    revision = generate_revision()
+    print('补充实验：', json.dumps(revision['antiwindup_peak_height_m'],ensure_ascii=False))
     print(json.dumps({'checks':checks,'metrics':metrics,'intro_checks':intro,'progressive_checks':progressive},ensure_ascii=False,indent=2))
     print('完成：',OUT)
 

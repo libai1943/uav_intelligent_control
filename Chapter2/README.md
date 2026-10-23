@@ -1,72 +1,48 @@
-# 第二章：高度控制递进实验
+# 第二章：PID与高度控制
 
-更新日期：2026-10-19
+第二章：独立Python与MATLAB实现
 
-一键运行
-  python -m pip install -r requirements.txt
-  python RunMe.py
-结果位于本目录的 results，不依赖启动时的工作目录。
-程序不联网、不读取外部数据、不连接飞控硬件；重复运行更新同名结果。
-需要 Python 3.10+、NumPy、Matplotlib。推荐安装 Microsoft YaHei 或 Noto Sans CJK SC。
+一、运行
+Python：安装requirements.txt所列依赖，执行 python RunMe.py，结果写入results。
+MATLAB：MATLAB R2021b或更新版本，在本目录执行 RunMe，结果写入results_matlab。
+MATLAB实现只使用基础MATLAB函数，不需要Control System Toolbox，不调用Python。
+experiment_cases.json是随源码提供的显式实验参数，不是Python计算结果。直接运行MATLAB无需先运行Python。
 
-正文主线
-RunMe.py 调用 progressive.py，按同一高度任务生成六组对照：
-1. stage1_p：有阻尼的P能够收敛，与完全忽略阻尼的P作边界对照。
-2. stage2_bias：14 s施加-2 N外力，Kp=4与Kp=8分别留下0.5 m与0.25 m误差。
-3. stage3_integral：在Kp=4基础上加入Ki=1.2，展示误差恢复与积分补偿保留。
-4. stage4_derivative：保持P、I不变，增加Kd=1.5，展示速度制动对过渡过程的作用。
-5. stage5_cascade：高度外环P、速度内环PI；参考2 m到3 m，14 s加入外力。
-6. stage6_feedforward_feedback：初始悬停3 m，2 s加入-0.4 N外力；比较固定重力前馈与同一前馈加反馈。
-主线模型：dh/dt=v_z；m*dv_z/dt=T-m*g-b*v_z+d_z。
-参数：m=1.6 kg，b=1.6 N*s/m，g=9.81 m/s^2。无阻尼对照取b=0。
-b为局部线性阻力近似的教学参数，未对应某一实际飞行器的辨识值。
-主线比较的其他参数保持一致；程序检查这些主线实验未触及推力限幅。
-假定姿态近水平、推力瞬时执行、质量恒定、反馈准确。
-未包含完整气动、姿态、电机、传感器、延迟和真实能源模型。
+二、理论与代码
+运动模型：m h''=T-mg-b v_z+d_z。
+控制器：Tcmd=m0*g+Kp*(r-h)+Ki*I-Kd*v_z；级联结构另按正文给出的速度PI计算。
+每周期先用已有I计算推力，再限幅、更新I及运动状态。
+h和v_z同时使用旧时刻值作单步显式欧拉更新，dt=0.002 s。
+原始数值实验默认理想状态反馈与瞬时推力执行。
+条件积分在指令已超限且误差会加重超限时暂停积分，不改变实际推力上限。
+0.002 s是教学程序设置，不是实机高度外环频率建议。
 
-控制接口
-非级联：T_cmd=m0*g+Kp*(r-h)+Ki*I-Kd*v_z；dI/dt=r-h。
-级联：v_ref=clip(Kh*(r-h),-vmax,vmax)；e_v=v_ref-v_z；
-      T_cmd=m0*g+Kv*e_v+Kiv*I_v；dI_v/dt=e_v。
-实际T=clip(T_cmd,0,Tmax)。条件积分用于扩展受限实验。
-P/I/D增益的单位不同，不是加起来等于100%的权重。
-非级联积分状态单位m*s；速度内环的积分状态单位m。
+三、正文曲线的对应文件
+height_step / performance_overview：章首参考阶跃和性能指标。
+stage1_p：有阻尼与无阻尼P，包含高度、竖直速度和总推力。
+stage2_bias：持续外力下Kp=4与Kp=8。
+stage3_integral：P与PI，以及比例修正/积分补偿。
+stage4_derivative：PI与PID。
+stage5_cascade：高度、参考及实际速度、推力。
+stage6_feedforward_feedback：同一重力前馈，有无反馈修正。
+stage7_antiwindup：同一高度阶跃与推力上限，普通积分/条件积分。
+stage8_cascade_comparison：改变内环、改变外环、单环PID/级联。
+stage9_velocity_limit：初始高度1米，参考3米，观察速度限幅。
+以上11组图形均有独立MATLAB实现。Python还保留exp开头的早期扩展图，不属于本版正文必需结果。
+两种绘图工具的字体和标注位置可以不同，但数值案例一致。
 
-数值与核验
-采样周期0.002 s，每周期计算一次控制并保持，物体用单步显式Euler推进。
-先用当前I计算推力，再按实际饱和方向决定是否更新下一周期I。
-与正文采样算法相同；级联时改用速度误差更新积分。
-以0.001 s复算作为数值对照。检查有限值、推力范围及末段误差。
-不作闭环特征根、稳定性不等式或解析响应推导。
-结果保存在 progressive_results.json，包括参数、数值检查、指标。
-各配置CSV包含时间、参考高度、高度、速度、误差、积分、指令推力、
-实际推力、外力、参考速度、参考导数及积分导数。
-feedforward_open.csv为相同单步Euler方法计算的纯前馈悬停响应。
+四、复核
+两个入口都运行后，执行 python CheckResults.py。
+脚本检查19组CSV的形状和逐元素数值差（默认最大绝对差要求小于1e-7）。
+其中feedforward_open在Python保留原来的时间/高度/速度三列接口，核验时映射到MATLAB同名数据的相应列。
+JSON与CSV保存实际计算值。正文的参数调整和前馈反馈记录均来自这些结果。
+数值容差仅用于两种实现的一致性核对，不表示真实飞行精度保证。
 
-指标口径
-主线 initial_step 只取0<=t<14 s，排除14 s外力加入后的运动。
-上升时间：参考阶跃10%到90%；超调：超过参考的峰值/阶跃幅度；
-调节时间：在有限观测窗内最后进入参考±2%阶跃幅度带的时刻。
-P、PI、PID在无扰动阶段均以参考为终值，故与教材终值定义一致。
-数值检查只覆盖给定模型和有限观测窗，不构成任意对象的稳定性证明。
-stage_no_drag为持续振荡边界对照，末段均值不代表稳态误差。
-final_2s_mean_error_m记录全实验最后2秒的平均误差，不自动替代极限。
+五、修改参数
+Python主线：progressive.py中的cases；补充实验：revision_experiments.py中的cases。
+MATLAB：experiment_cases.json中的同名案例参数。
+Python重新运行时会根据当前Python案例定义重写experiment_cases.json，使其与Python设置对应；如需保留自行修改的MATLAB参数，应先另存一份。
+不要同时修改多项条件后把全部响应差异归因于一个参数。
+教材的数值表和文字按默认参数编写；修改参数后的输出不会自动改写教材正文。
 
-章首图
-intro_figures.py生成height_step与performance_overview。
-指标图的终值为2.9 m，参考为3 m，稳态误差0.1 m。
-其模型为b=0、Kd=2.4、Kp=4、Ki=0、从0 s施加-0.4 N外力；
-总阻尼b+Kd=2.4，与正文所述等效阻尼模型一致。
-该图上升时间、超调和调节带以实际终值为基准，另记参考口径。
-核验记录为intro_checks.json，不与主线参数混用。
-
-保留的扩展实验
-RunMe.py也运行此前exp1至exp5五组实验，便于进一步观察无阻尼模型、
-增益改变、积分饱和、条件积分和平滑参考跟踪。
-这些结果由results.json和metrics.csv记录，当前正文未展开。
-扩展实验说明.txt保留其详细参数；其中未加入阻力，drag默认为0。
-
-修改参数
-正文主线在progressive.py的cases中修改；扩展实验在RunMe.py的cases中修改。
-断言针对默认实验。改变任务或参数以后，需相应检查对照条件与数值标准是否仍适用。
-先改变一项条件，再比较高度、速度、各项补偿及推力，有助于解释变化。
+本目录实现的是一维、近水平的教学模型，不包含真实飞控接口。
