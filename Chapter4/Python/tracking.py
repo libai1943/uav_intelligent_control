@@ -23,8 +23,7 @@ X_MAX = np.array([np.inf, np.inf, np.inf, 25., .2, .9, .6])
 POS_SCALE, VEL_SCALE = 5., 2.
 INPUT_WEIGHT = .05
 INITIAL_OFFSET = np.array([0., 5., 3., 0., 0., np.deg2rad(3), 0.])
-COLUMNS = np.array([[180., -30., 32.], [270., 15., 35.],
-                    [360., -35., 32.], [450., 20., 30.]])
+COLUMNS = np.array([[200., -140., 155.], [400., 140., 155.]])
 
 
 def derivatives(x):
@@ -43,8 +42,8 @@ def derivatives(x):
 
 
 def reference(extra=50):
-    states = np.loadtxt(ROOT/'reference/state.csv', delimiter=',', skiprows=1)
-    controls = np.loadtxt(ROOT/'reference/control.csv', delimiter=',', skiprows=1)
+    states = np.loadtxt(ROOT.parent/'reference/state.csv', delimiter=',', skiprows=1)
+    controls = np.loadtxt(ROOT.parent/'reference/control.csv', delimiter=',', skiprows=1)
     assert np.max(np.abs(np.diff(states[:, 0])-DT)) < 1e-12
     X, U = states[:, 1:].copy(), controls[:, 1:].copy()
     # End state is continuing level, straight flight; do not freeze its position.
@@ -63,11 +62,23 @@ def solve_mpc(xhat, xr, ur, previous=None):
     """One fixed-linearization QP; no nonlinear optimizer or inner SQP loop."""
     started = perf_counter()
     H = len(ur); nx = 7*(H+1); nv = nx+3*H
+    # Shift the previous correction, append zero at the new tail, and rebuild
+    # every expansion state from the new measured initial state.
+    dU_seed = np.zeros_like(ur) if previous is None else np.vstack([previous[1:], np.zeros(3)])
+    barU = np.clip(ur+dU_seed, -U_MAX, U_MAX)
+    dU_seed = barU-ur
+    barX = xr.copy()
+    if previous is not None:
+        barX[0] = xhat
+        for i in range(H):
+            barX[i+1] = barX[i]+DT*motion(barX[i],barU[i])
     As, Bs, cs = [], [], []
     for i in range(H):
-        J, B = derivatives(xr[i])
-        As.append(np.eye(7)+DT*J); Bs.append(DT*B)
-        cs.append(xr[i+1]-xr[i]-DT*motion(xr[i], ur[i]))
+        J, B = derivatives(barX[i])
+        A = np.eye(7)+DT*J; B = DT*B
+        affine = barX[i]+DT*motion(barX[i],barU[i])-A@barX[i]-B@barU[i]
+        As.append(A); Bs.append(B)
+        cs.append(xr[i+1]-A@xr[i]-B@ur[i]-affine)
     P = sparse.block_diag([np.zeros((7, 7))]+
         [2*state_cost(xr[i]) for i in range(1, H+1)]+
         [2*INPUT_WEIGHT*np.diag(1/U_MAX**2)]*H, format='csc')
@@ -90,7 +101,7 @@ def solve_mpc(xhat, xr, ur, previous=None):
                  polishing=True, warm_starting=True)
     if previous is not None:
         # Overlapping reference samples are identical; shift correction sequence.
-        dU = np.vstack([previous[1:], np.zeros(3)])
+        dU = dU_seed
         E = [rhs[:7]]
         for i in range(H):
             E.append(As[i]@E[-1]-Bs[i]@dU[i]+cs[i])
@@ -200,7 +211,7 @@ def main():
     assert mainrun['position_final_m']<.5
     assert runs[-1]['metrics']['position_max_m']<1e-4
     assert all(r['metrics']['state_violation']<1e-4 for r in runs)
-    report=dict(date='2026-10-21', dt_s=DT, model='same seven-state rate-input kinematics as Chapter3',
+    report=dict(date='2026-10-24', dt_s=DT, model='same seven-state rate-input kinematics as Chapter3',
         horizon_steps=[5,20,40], position_scale_m=POS_SCALE, velocity_scale_m_s=VEL_SCALE,
         input_weight=INPUT_WEIGHT, initial_offset=INITIAL_OFFSET.tolist(),
         disturbance=dict(course_rate_gain=1.06, wind_m_s=[0,1,.3], wind_start_s=45*DT,wind_end_s=67*DT),

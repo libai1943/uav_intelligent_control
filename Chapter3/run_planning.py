@@ -25,6 +25,7 @@ class Problem:
     def __init__(self,scene='two',seed_kind='astar',corridor=False,intervals=200):
         self.scene,self.seed_kind,self.corridor=scene,seed_kind,corridor
         self.cfg=dict(CFG,intervals=intervals,fragment_steps=intervals//20)
+        self.cfg.update(SCENES[scene].get("overrides",{}))
         self.N=intervals;self.M=intervals+1;self.dt=CFG['duration_s']/intervals
         self.obs=np.array(SCENES[scene]['columns'],float)
         start=np.array(CFG['start_state'],float);goal=np.array(SCENES[scene]['goal'],float)
@@ -53,7 +54,7 @@ class Problem:
         q=np.asarray(z).reshape(-1)*self.scale
         return q[:7*self.M].reshape(-1,7),q[7*self.M:].reshape(-1,3)
 
-    def solve(self):
+    def solve(self,repetitions=1):
         z=ca.MX.sym('z',len(self.scale));q=z*ca.DM(self.scale)
         X=ca.reshape(q[:7*self.M],7,self.M);U=ca.reshape(q[7*self.M:],3,self.N)
         # Identical single-step Euler connection in the book and solver.
@@ -76,7 +77,12 @@ class Problem:
         solver=ca.nlpsol('plan','ipopt',dict(x=z,f=J,g=g),{'print_time':False,'ipopt.print_level':0,
             'ipopt.sb':'yes','ipopt.tol':1e-8,'ipopt.constr_viol_tol':1e-8,'ipopt.max_iter':700,
             'ipopt.bound_relax_factor':0.,'ipopt.fixed_variable_treatment':'make_parameter'})
-        begin=time.perf_counter();res=solver(x0=self.z0,lbx=self.lb,ubx=self.ub,lbg=np.concatenate(lbg),ubg=np.concatenate(ubg));seconds=time.perf_counter()-begin
+        call=dict(x0=self.z0,lbx=self.lb,ubx=self.ub,lbg=np.concatenate(lbg),ubg=np.concatenate(ubg))
+        if repetitions>1:solver(**call)  # Untimed warm-up, same initial solution each run.
+        solve_times=[]
+        for _ in range(repetitions):
+            begin=time.perf_counter();res=solver(**call);solve_times.append(time.perf_counter()-begin)
+        seconds=float(np.median(solve_times))
         zz=np.array(res['x']).ravel();XX,UU=self.unpack(zz);stats=solver.stats()
         gv=np.array(gf(zz)).ravel();residual=max(np.max(np.abs(gv[:7*self.N])),max(-gv[7*self.N:],default=0),np.max(self.lb-zz),np.max(zz-self.ub),0)
         passed,checks,dense=self.validate(XX,UU,residual)
@@ -84,7 +90,7 @@ class Problem:
         X0,U0=self.unpack(self.z0)
         return dict(scene=self.scene,seed_kind=self.seed_kind,corridor=self.corridor,intervals=self.N,
           solver_success=bool(stats['success']),accepted=bool(stats['success'] and passed),message=stats['return_status'],
-          objective=float(res['f']),iterations=int(stats['iter_count']),seconds=seconds,checks=checks,
+          objective=float(res['f']),iterations=int(stats['iter_count']),seconds=seconds,solve_times_s=solve_times,checks=checks,
           derivative_check_max_error=err,initial_max_scaled_defect=float(np.max(np.abs(np.array(gf(self.z0)).ravel()[:7*self.N]))),
           nonlinear_obstacle_constraints=0 if self.corridor else len(self.obs)*self.M,
           position_box_bounds=6*self.M if self.corridor else 0,X=XX,U=UU,initial_X=X0,initial_U=U0,
@@ -145,19 +151,20 @@ def environment():
 
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('--case',default='all',choices=['all','two_straight','two_north','two_south','two_corridor','four_direct','four_corridor','five_corridor','four_grid100']);ap.add_argument('--plots-only',action='store_true');ap.add_argument('--no-plots',action='store_true');args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument('--case',default='all',choices=['all','two_straight','two_north','two_south','two_corridor','four_direct','four_corridor','five_corridor','four_grid100','slalom_direct','crowd10_direct','crowd20_direct']);ap.add_argument('--plots-only',action='store_true');ap.add_argument('--no-plots',action='store_true');args=ap.parse_args()
     out=ROOT/'results_kinematic';out.mkdir(exist_ok=True)
     jobs=[('two_straight','two','straight',False,200),('two_north','two','north',False,200),
       ('two_south','two','south',False,200),('two_corridor','two','astar',True,200),
       ('four_direct','four','astar',False,200),('four_corridor','four','astar',True,200),
-      ('five_corridor','five','astar',True,200),('four_grid100','four','astar',True,100)]
+      ('five_corridor','five','astar',True,200),('four_grid100','four','astar',True,100),('slalom_direct','slalom','astar',False,200),
+      ('crowd10_direct','crowd10','north',False,200),('crowd20_direct','crowd20','north',False,200)]
     results={}
     for name,scene,seed,cor,N in jobs:
         if args.case!='all' and args.case!=name:continue
         if args.plots_only:
             r=json.loads((out/name/'result.json').read_text(encoding='utf-8'));r.update(dict(np.load(out/name/'data.npz')))
         else:
-            print(name+': constructing and solving',flush=True);r=Problem(scene,seed,cor,N).solve();save(r,out/name)
+            print(name+': constructing and solving',flush=True);r=Problem(scene,seed,cor,N).solve(repetitions=5 if name in ('two_north','crowd10_direct','crowd20_direct') else 1);save(r,out/name)
             print(json.dumps({k:r[k] for k in ('accepted','iterations','seconds','objective','checks')},indent=2),flush=True)
         results[name]=r
     report=[{k:v for k,v in r.items() if not isinstance(v,np.ndarray)} for r in results.values()]
@@ -168,6 +175,8 @@ def main():
         make_examples(out)
         from figures import plot_all
         plot_all(results,out)
+        from additions import plot_additions
+        plot_additions(results,out)
         from tables import make_tables
         make_tables(results)
     assert all(r['accepted'] for r in results.values()),'Inspect result.json: failed discrete-model checks.'

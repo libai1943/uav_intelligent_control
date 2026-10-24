@@ -1,4 +1,4 @@
-"""Rate-input Dubins airplane. z upward, SI units.
+"""Simplified fixed-wing kinematic planning model. z upward, SI units.
 States: x,y,z,V,gamma,chi,phi. Inputs: a,omega_gamma,omega_phi.
 Near-level coordinated bank-to-turn approximation with ideal low-level tracking.
 Basis: Adajania et al., IROS 2021, eqs.(1)-(2), arXiv:2109.12609;
@@ -6,7 +6,7 @@ Beard/McLain, Implementing Dubins Airplane Paths on Fixed-wing UAVs.
 """
 import numpy as np
 G=9.81
-PAR=dict(g=G,model='rate-input Dubins airplane',z_positive='up')
+PAR=dict(g=G,model='seven-state fixed-wing kinematics',z_positive='up')
 
 def motion(x,u):
     V,ga,ch,phi=(x[...,i] for i in (3,4,5,6))

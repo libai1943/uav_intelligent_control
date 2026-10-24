@@ -68,9 +68,9 @@ def make_figures(out, xr, ur, runs):
                                 ('mpc20','MPC 跟踪',TEAL,'-')]:
         X=loaded['mpc20']['reference'] if name=='reference' else loaded[name]['X']
         ax.plot(*X[:,:3].T,label=label,color=color,ls=ls,lw=1.5)
-    ax.set(xlim=(0,610),ylim=(-100,230),zlim=(80,180),
+    ax.set(xlim=(0,610),ylim=(-225,225),zlim=(80,180),
            xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',zlabel='高度 $z$ / m')
-    ax.set_box_aspect((610,330,100))
+    ax.set_box_aspect((610,450,100))
     ax.view_init(elev=29,azim=-65)
     ax.legend(loc='upper right',bbox_to_anchor=(1.2,.94),frameon=False,fontsize=9)
     ax.tick_params(labelsize=8,pad=1)
@@ -85,7 +85,7 @@ def make_figures(out, xr, ur, runs):
         ax1.plot(X[:,0],X[:,1],color=color,ls=ls,label=label)
         ax2.plot(times,X[:,2],color=color,ls=ls)
     ax1.set_aspect('equal',adjustable='box')
-    ax1.set_xlim(-10,615);ax1.set_ylim(-90,210)
+    ax1.set_xlim(-10,615);ax1.set_ylim(-225,225)
     ax1.set(xlabel='位置 $x$ / m',ylabel='位置 $y$ / m',title='(a) 俯视航迹')
     ax2.set(xlabel='时间 $t$ / s',ylabel='高度 $z$ / m',title='(b) 高度随时间变化')
     ax1.legend(frameon=False,fontsize=8,loc='upper left')
@@ -129,11 +129,11 @@ def make_figures(out, xr, ur, runs):
     save(fig,'inputs')
     # Tangent approximation for one term in the same flight model.
     fig,ax=plt.subplots(figsize=(5.5,2.4))
-    angle=np.linspace(-.75,.75,201)
+    angle=np.linspace(-.4,1.3,201); expansion=.45
     ax.plot(angle,20*np.sin(angle),color=TEAL,label=r'原关系 $20\sin\chi$')
-    ax.plot(angle,20*angle,color=WARM,ls='--',label=r'一阶近似 $20\chi$')
-    ax.plot([0],[0],'o',color='#333333',ms=4)
-    ax.annotate('展开点',xy=(0,0),xytext=(.13,-4),
+    ax.plot(angle,20*np.sin(expansion)+20*np.cos(expansion)*(angle-expansion),color=WARM,ls='--',label='展开点处的切线')
+    ax.plot([expansion],[20*np.sin(expansion)],'o',color='#333333',ms=4)
+    ax.annotate('展开点',xy=(expansion,20*np.sin(expansion)),xytext=(.72,1),
                 arrowprops={'arrowstyle':'->','color':'#333333'},fontsize=9)
     ax.set(xlabel='航迹方位角 $\\chi$ / rad',ylabel='横向速度 $\\dot y$ / (m/s)')
     finish(ax);ax.legend(frameon=False,fontsize=9)
@@ -183,7 +183,7 @@ def make_figures(out, xr, ur, runs):
         '\\textbf{95\\%分位耗时/ms}&\\textbf{最大耗时/ms}\\\\\\hline\n'
         +'\n'.join(table)+'\n\\end{tabularx}',encoding='utf-8')
     # Figures stay alongside the program; textbook copies made only when its directory exists.
-    book_figs=out.parent.parent/'chapter4_figures'
+    book_figs=out.parent.parent.parent/'chapter4_figures'
     if book_figs.is_dir():
         import shutil
         for p in dest.glob('*.pdf'):

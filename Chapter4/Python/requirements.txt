@@ -3,3 +3,4 @@ scipy>=1.10
 matplotlib>=3.7
 osqp>=1.0
 pypdf>=4.0
+Pillow>=9.0

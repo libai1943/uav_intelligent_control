@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "scope": "8 independent MATLAB/Python single-step Euler OCPs plus forward and gradient illustrations",
+  "scope": "11 independent MATLAB/Python single-step Euler OCPs plus forward and gradient illustrations",
   "criterion": "Each language independently passes physical/normalized checks; then CSV comparison",
   "results": [
     {
@@ -138,6 +138,57 @@
       },
       "max_state_csv_difference": 9.805489753489383e-13,
       "max_control_csv_difference": 2.4202861936828413e-14
+    },
+    {
+      "case": "slalom_direct",
+      "python": {
+        "eta": 2.419939248987646e-15,
+        "objective": 0.7929506343025794,
+        "min_segment_clearance_m": 10.993559703298217,
+        "reconstruction_position_error_m": 7.6235176779947e-12
+      },
+      "matlab": {
+        "eta": 6.108400822194919e-15,
+        "objective": 0.7929506343025804,
+        "min_segment_clearance_m": 10.99355970329816,
+        "reconstruction_position_error_m": 8.223802187599302e-12
+      },
+      "max_state_csv_difference": 7.389644451905042e-13,
+      "max_control_csv_difference": 1.0325074129013956e-14
+    },
+    {
+      "case": "crowd10_direct",
+      "python": {
+        "eta": 6.568342513409616e-13,
+        "objective": 0.4758606685365845,
+        "min_segment_clearance_m": 10.991726931078652,
+        "reconstruction_position_error_m": 7.302330811411559e-09
+      },
+      "matlab": {
+        "eta": 6.567995568714421e-13,
+        "objective": 0.4758606685365819,
+        "min_segment_clearance_m": 10.991726931078617,
+        "reconstruction_position_error_m": 7.3025192916659385e-09
+      },
+      "max_state_csv_difference": 9.094947017729282e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
+    },
+    {
+      "case": "crowd20_direct",
+      "python": {
+        "eta": 8.397926451464421e-13,
+        "objective": 0.4758606685434065,
+        "min_segment_clearance_m": 10.991726872240335,
+        "reconstruction_position_error_m": 9.332300081473753e-09
+      },
+      "matlab": {
+        "eta": 8.40551586667182e-13,
+        "objective": 0.4758606685434059,
+        "min_segment_clearance_m": 10.991726872240392,
+        "reconstruction_position_error_m": 9.332240229115283e-09
+      },
+      "max_state_csv_difference": 5.684341886080801e-13,
+      "max_control_csv_difference": 7.105427357601002e-15
     }
   ]
 }

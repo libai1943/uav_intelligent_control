@@ -10,7 +10,7 @@ import numpy as np
 ROOT=Path(__file__).resolve().parent
 SETTINGS=json.loads((ROOT/'config.json').read_text(encoding='utf-8'))
 CFG=SETTINGS['config'];SX=np.array([600,150,150,20,.3,.6,.6]);SU=np.array([2,.08,.4])
-CASES=['two_straight','two_north','two_south','two_corridor','four_direct','four_corridor','five_corridor','four_grid100']
+CASES=['two_straight','two_north','two_south','two_corridor','four_direct','four_corridor','five_corridor','four_grid100','slalom_direct','crowd10_direct','crowd20_direct']
 
 def read(path):
     return np.loadtxt(path,delimiter=',',skiprows=1,ndmin=2)
@@ -85,7 +85,7 @@ def main():
     assert len(a)==len(b)==4
     for x,y in zip(a,b):
         assert x['iterations']==y['iterations'] and abs(x['solution']-y['solution'])<1e-12
-    report=dict(passed=True,scope='8 independent MATLAB/Python single-step Euler OCPs plus forward and gradient illustrations',
+    report=dict(passed=True,scope='11 independent MATLAB/Python single-step Euler OCPs plus forward and gradient illustrations',
                 criterion='Each language independently passes physical/normalized checks; then CSV comparison',results=records)
     (ROOT/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
     print('All Chapter 3 checks passed.')

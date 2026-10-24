@@ -56,7 +56,13 @@ opts=struct('print_time',false);opts.ipopt=struct('print_level',0,'sb','yes','to
  'constr_viol_tol',1e-8,'max_iter',700,'bound_relax_factor',0,'fixed_variable_treatment','make_parameter');
 solver=nlpsol('plan','ipopt',struct('x',z,'f',J,'g',g),opts);
 fprintf('  solver initialized\n');
-tic;res=solver('x0',z0,'lbx',lb,'ubx',ub,'lbg',lbg,'ubg',ubg);seconds=toc;stats=solver.stats();
+repetitions=1;if isfield(cfg,'benchmark_repetitions'),repetitions=cfg.benchmark_repetitions;end
+if repetitions>1,solver('x0',z0,'lbx',lb,'ubx',ub,'lbg',lbg,'ubg',ubg);end
+solveTimes=zeros(1,repetitions);
+for repeat=1:repetitions
+ tic;res=solver('x0',z0,'lbx',lb,'ubx',ub,'lbg',lbg,'ubg',ubg);solveTimes(repeat)=toc;
+end
+seconds=median(solveTimes);stats=solver.stats();
 zz=full(res.x);physical=zz.*scale;XX=reshape(physical(1:7*M),7,M)';UU=reshape(physical(7*M+1:end),3,N)';
 gv=full(gf(zz));violation=max([0;abs(gv(1:7*N));-gv(7*N+1:end);lb-zz;zz-ub]);
 rollout=zeros(M,7);rollout(1,:)=XX(1,:);
@@ -84,7 +90,7 @@ passed=violation<1e-6 && clear>=cfg.safety_margin_m && nodeError<1e-3 && norm(te
 initialG=full(gf(z0));
 r=struct('scene',sceneName,'seed_kind',seedKind,'corridor',corridor,'intervals',N, ...
  'solver_success',logical(stats.success),'accepted',logical(stats.success && passed), ...
- 'message',stats.return_status,'objective',full(res.f),'iterations',stats.iter_count,'seconds',seconds, ...
+ 'message',stats.return_status,'objective',full(res.f),'iterations',stats.iter_count,'seconds',seconds,'solve_times_s',solveTimes, ...
  'checks',checks,'derivative_check_max_error',err,'initial_max_scaled_defect',max(abs(initialG(1:7*N))), ...
  'nonlinear_obstacle_constraints',double(~corridor)*size(obs,1)*M,'position_box_bounds',double(corridor)*6*M, ...
  'seed_average_speed_m_s',seedSpeed,'spline_clearance_m',clearance, ...

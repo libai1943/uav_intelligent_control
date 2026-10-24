@@ -13,14 +13,19 @@ settings=jsondecode(fileread(fullfile(root,'config.json')));
 jobs={'two_straight','two','straight',false,200; 'two_north','two','north',false,200; ...
  'two_south','two','south',false,200;'two_corridor','two','astar',true,200; ...
  'four_direct','four','astar',false,200;'four_corridor','four','astar',true,200; ...
- 'five_corridor','five','astar',true,200;'four_grid100','four','astar',true,100};
+ 'five_corridor','five','astar',true,200;'four_grid100','four','astar',true,100; 'slalom_direct','slalom','astar',false,200; ...
+ 'crowd10_direct','crowd10','north',false,200; 'crowd20_direct','crowd20','north',false,200};
 assert(strcmp(caseName,'all') || any(strcmp(caseName,jobs(:,1))),'Unknown experiment name.');
 out=fullfile(root,'results_matlab');if ~exist(out,'dir'),mkdir(out);end
 results=struct();records={};
 for i=1:size(jobs,1)
  name=jobs{i,1};if ~strcmp(caseName,'all') && ~strcmp(caseName,name),continue;end
  fprintf('%s: constructing and solving\n',name);
- r=solve_fixedwing(settings.config,settings.scenes.(jobs{i,2}),jobs{i,2},jobs{i,3},jobs{i,4},jobs{i,5});
+ cfg=settings.config;sc=settings.scenes.(jobs{i,2});
+ if isfield(sc,'overrides'),fields=fieldnames(sc.overrides);for j=1:numel(fields),cfg.(fields{j})=sc.overrides.(fields{j});end;end
+ cfg.benchmark_repetitions=1;
+ if any(strcmp(name,{'two_north','crowd10_direct','crowd20_direct'})),cfg.benchmark_repetitions=5;end
+ r=solve_fixedwing(cfg,sc,jobs{i,2},jobs{i,3},jobs{i,4},jobs{i,5});
  folder=fullfile(out,name);if ~exist(folder,'dir'),mkdir(folder);end
  save(fullfile(folder,'data.mat'),'r');
  writecsv(fullfile(folder,'state.csv'),[r.time,r.X],{'t','x','y','z','V','gamma','chi','phi'});

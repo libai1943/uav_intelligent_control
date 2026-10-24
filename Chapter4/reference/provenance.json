@@ -1,10 +1,30 @@
 {
-  "control.csv": {
-    "sha256": "34228fd823e1efb558e3c09b66daf35e74618861f7e86e42f6fbd292261974e5",
-    "source": "Chapter3/results_kinematic/four_corridor/control.csv"
-  },
-  "state.csv": {
-    "sha256": "2fc264ec1a747f4933bff1b6a29880e5571e9d8f78b2084a395bf91db32075ad",
-    "source": "Chapter3/results_kinematic/four_corridor/state.csv"
+  "chapter3_case": "slalom_direct",
+  "duration_s": 36,
+  "intervals": 200,
+  "columns": [
+    [
+      200,
+      -140,
+      155
+    ],
+    [
+      400,
+      140,
+      155
+    ]
+  ],
+  "objective": 0.7929506343025793,
+  "checks": {
+    "max_scaled_constraint_violation": 2.4054832200211726e-15,
+    "min_discrete_segment_clearance_m": 10.993559703298217,
+    "remaining_geometric_margin_m": 2.9935597032982173,
+    "terminal_position_error_m": 7.6235176779947e-12,
+    "terminal_speed_error_m_s": 2.842170943040401e-14,
+    "terminal_direction_error_deg": 1.7038082340099366e-12,
+    "terminal_bank_error_deg": 1.5902773407317584e-15,
+    "max_node_reconstruction_error_m": 7.6235176779947e-12,
+    "max_discrete_corridor_violation_m": 0.0,
+    "discrete_state_bound_violation": 0.0
   }
 }

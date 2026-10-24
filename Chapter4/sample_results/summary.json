@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-21",
+  "date": "2026-10-24",
   "dt_s": 0.18,
   "model": "same seven-state rate-input kinematics as Chapter3",
   "horizon_steps": [
@@ -30,8 +30,8 @@
     "wind_end_s": 12.059999999999999
   },
   "numerical_checks": {
-    "jacobian_max_error": 1.1373948449744375e-09,
-    "reference_euler_defect": 3.0309088572266774e-12
+    "jacobian_max_error": 2.110919106179665e-09,
+    "reference_euler_defect": 2.4780177909633494e-13
   },
   "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
   "numpy": "2.5.4",
@@ -42,17 +42,17 @@
       "name": "open_loop",
       "horizon_steps": 0,
       "metrics": {
-        "position_rmse_m": 31.453069974921547,
-        "position_max_m": 42.23563121476025,
-        "position_final_m": 42.23563121476025,
-        "position_after20_rmse_m": 39.6879382591046,
-        "model_velocity_rmse_m_s": 1.14989027122777,
-        "min_segment_clearance_m": 44.12044044621575,
+        "position_rmse_m": 25.809303404043714,
+        "position_max_m": 40.65503489648806,
+        "position_final_m": 40.65503489648806,
+        "position_after20_rmse_m": 32.820019013786606,
+        "model_velocity_rmse_m_s": 0.9258686557214987,
+        "min_segment_clearance_m": -18.240714632990034,
         "state_violation": 0.0,
         "max_abs_input": [
-          0.6154957631132494,
-          0.014415471981376923,
-          0.31603624720640267
+          0.5305180110895484,
+          0.01435638884839992,
+          0.06855332663752621
         ]
       }
     },
@@ -60,22 +60,22 @@
       "name": "mpc20",
       "horizon_steps": 20,
       "metrics": {
-        "position_rmse_m": 1.9546296996177899,
-        "position_max_m": 6.250500073365333,
-        "position_final_m": 0.29294521885124675,
-        "position_after20_rmse_m": 0.19385165506922794,
-        "model_velocity_rmse_m_s": 0.507974078182528,
-        "min_segment_clearance_m": 27.48632068266045,
+        "position_rmse_m": 1.918055152345429,
+        "position_max_m": 6.244485097660141,
+        "position_final_m": 0.06385174016526579,
+        "position_after20_rmse_m": 0.12691113679923188,
+        "model_velocity_rmse_m_s": 0.5058903284797245,
+        "min_segment_clearance_m": 10.824312243842371,
         "state_violation": 0.0,
         "max_abs_input": [
-          0.620104708256055,
-          0.07999999999999999,
-          0.40000000000001235
+          0.9228258432538077,
+          0.08,
+          0.40000000000001046
         ],
-        "cycle_median_ms": 4.04770000022836,
-        "cycle_p95_ms": 4.927520000637742,
-        "cycle_max_ms": 5.711100006010383,
-        "max_qp_violation": 9.526556054427212e-14,
+        "cycle_median_ms": 4.39739998546429,
+        "cycle_p95_ms": 5.133090022718534,
+        "cycle_max_ms": 12.626799987629056,
+        "max_qp_violation": 8.0504963045385e-14,
         "solved_qps": 200
       }
     },
@@ -83,22 +83,22 @@
       "name": "mpc5",
       "horizon_steps": 5,
       "metrics": {
-        "position_rmse_m": 4.923083178556106,
-        "position_max_m": 7.682990841747805,
-        "position_final_m": 2.071362248131117,
-        "position_after20_rmse_m": 3.0613506419734966,
-        "model_velocity_rmse_m_s": 0.309224383821711,
-        "min_segment_clearance_m": 28.83670540396806,
+        "position_rmse_m": 5.153367132800223,
+        "position_max_m": 7.611061323653697,
+        "position_final_m": 2.613122048257688,
+        "position_after20_rmse_m": 3.8767530875649783,
+        "model_velocity_rmse_m_s": 0.27832200603509416,
+        "min_segment_clearance_m": 6.6947227834171485,
         "state_violation": 0.0,
         "max_abs_input": [
-          0.60806313726091,
-          0.021696815405495246,
+          0.6192949927637472,
+          0.018698899534613015,
           0.40000000000000013
         ],
-        "cycle_median_ms": 2.0901000025332905,
-        "cycle_p95_ms": 2.6889500004472198,
-        "cycle_max_ms": 3.696900006616488,
-        "max_qp_violation": 3.1086244689504383e-15,
+        "cycle_median_ms": 2.1733000176027417,
+        "cycle_p95_ms": 2.5002750480780374,
+        "cycle_max_ms": 2.8198000509291887,
+        "max_qp_violation": 2.6645352591003757e-15,
         "solved_qps": 200
       }
     },
@@ -106,22 +106,22 @@
       "name": "mpc40",
       "horizon_steps": 40,
       "metrics": {
-        "position_rmse_m": 1.8279823037026266,
-        "position_max_m": 6.242187225102323,
-        "position_final_m": 0.27074236482083425,
-        "position_after20_rmse_m": 0.18725021760576396,
-        "model_velocity_rmse_m_s": 0.5418111919671532,
-        "min_segment_clearance_m": 27.513500392908263,
+        "position_rmse_m": 1.7968954660138334,
+        "position_max_m": 6.234673262382712,
+        "position_final_m": 0.06134064462887575,
+        "position_after20_rmse_m": 0.09678233327227634,
+        "model_velocity_rmse_m_s": 0.5396668779727145,
+        "min_segment_clearance_m": 10.857448388299417,
         "state_violation": 0.0,
         "max_abs_input": [
-          0.621674050409001,
+          1.0698571575789175,
           0.08000000000000003,
-          0.4000000000000524
+          0.4000000000000477
         ],
-        "cycle_median_ms": 6.737749994499609,
-        "cycle_p95_ms": 39.8687200002314,
-        "cycle_max_ms": 44.81760000635404,
-        "max_qp_violation": 3.8325067533186704e-13,
+        "cycle_median_ms": 7.5941000250168145,
+        "cycle_p95_ms": 46.62684499344322,
+        "cycle_max_ms": 52.858499984722584,
+        "max_qp_violation": 3.4855334903104604e-13,
         "solved_qps": 200
       }
     },
@@ -129,22 +129,22 @@
       "name": "ideal20",
       "horizon_steps": 20,
       "metrics": {
-        "position_rmse_m": 1.0511248535780658e-11,
-        "position_max_m": 2.0932106611973918e-11,
-        "position_final_m": 1.0243796938634394e-12,
-        "position_after20_rmse_m": 1.1111380758702234e-11,
-        "model_velocity_rmse_m_s": 6.455930483121542e-12,
-        "min_segment_clearance_m": 27.636446543491402,
+        "position_rmse_m": 3.5869580043394784e-13,
+        "position_max_m": 1.101919836962138e-12,
+        "position_final_m": 1.0579594591656217e-13,
+        "position_after20_rmse_m": 4.983462766475094e-13,
+        "model_velocity_rmse_m_s": 2.1694823082963287e-13,
+        "min_segment_clearance_m": 10.993559703298189,
         "state_violation": 0.0,
         "max_abs_input": [
-          0.6154957631131667,
-          0.014415471981376817,
-          0.3160362472063979
+          0.5305180110895553,
+          0.014356388848399952,
+          0.06855332663752631
         ],
-        "cycle_median_ms": 21.292700002959464,
-        "cycle_p95_ms": 26.022544992883923,
-        "cycle_max_ms": 27.846600001794286,
-        "max_qp_violation": 1.2924697071141057e-26,
+        "cycle_median_ms": 21.651150018442422,
+        "cycle_p95_ms": 29.383885022252795,
+        "cycle_max_ms": 32.16750000137836,
+        "max_qp_violation": 4.0389678347315804e-28,
         "solved_qps": 200
       }
     }
