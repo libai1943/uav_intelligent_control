@@ -75,7 +75,7 @@ def generate(out, cases, simulate, Case, save_series, finish):
     ax.text(tp-.4, hp+.09, r'峰值高度 $h_{\mathrm{peak}}$', fontsize=9)
     ax.plot([tp,3.65], [hp,hp], **guide)
     ax.annotate('', xy=(3.65,hf), xytext=(3.65,hp), arrowprops=arrows)
-    ax.text(3.85, hp+.025, '超出终值\n的高度', fontsize=9, ha='left')
+    ax.annotate('超出终值的高度', xy=(3.65, (hf+hp)/2), xytext=(4.7, hp+.09), fontsize=9, ha='left', arrowprops={'arrowstyle':'-','color':'#A86E36','lw':.8})
     ax.plot([ts,ts], [h0,hf+tol], color='#A86E36', lw=.9, ls='--')
     ax.text(ts+.13, 2.49, '调节时间 $t_s$', fontsize=9, color='#8F5C2A')
     ax.text(8.7, r+.045, '参考高度 $r_1$', fontsize=9)

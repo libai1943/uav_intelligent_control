@@ -1,0 +1,1 @@
+{"off":{"final_error_m":0.22999999999998755,"peak_error_m":0.22999999999998755,"end_time_s":100},"frozen":{"final_error_m":0.066666666666649554,"peak_error_m":0.07905275600556072,"end_time_s":100},"online":{"final_error_m":1.7319479184152442E-14,"peak_error_m":0.07905275600556072,"end_time_s":100},"checks":"Analytical balances, finite states and execution limits verified"}

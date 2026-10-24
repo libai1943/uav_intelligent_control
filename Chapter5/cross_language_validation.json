@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "cases": {
+    "force_continuous.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 2.168404344971009e-19
+    },
+    "force_quantized.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 4.440892098500626e-16
+    },
+    "rise_continuous.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 3.469446951953614e-18
+    },
+    "rise_quantized.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 6.938893903907228e-18
+    },
+    "small_continuous.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 3.552713678800501e-15
+    },
+    "small_quantized.csv": {
+      "rows": 3001,
+      "columns": 5,
+      "max_absolute_difference": 0.0
+    }
+  },
+  "atol": 1e-08,
+  "rtol": 1e-09,
+  "date": "2026-10-25"
+}

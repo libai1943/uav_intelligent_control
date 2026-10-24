@@ -1,0 +1,42 @@
+{
+  "passive": {
+    "final_error_m": 0.2112923077251052,
+    "peak_error_m": 0.21454792632870934,
+    "end_time_s": 10.0,
+    "alarm_s": 3.15,
+    "final_alpha_hat": 0.6500000000000018,
+    "max_command_N": 25.720339384931208
+  },
+  "active": {
+    "final_error_m": 1.0391687510491465e-13,
+    "peak_error_m": 0.08499802857713679,
+    "end_time_s": 10.0,
+    "alarm_s": 3.15,
+    "final_alpha_hat": 0.6500000000000018,
+    "max_command_N": 27.465467838738665
+  },
+  "delayed": {
+    "final_error_m": 2.0250467969162855e-13,
+    "peak_error_m": 0.1880433886618622,
+    "end_time_s": 10.0,
+    "alarm_s": 3.15,
+    "final_alpha_hat": 0.6500000000000018,
+    "max_command_N": 28.0
+  },
+  "force_ambiguity": {
+    "final_error_m": -8.991563049676188e-11,
+    "peak_error_m": 0.05593690834642473,
+    "end_time_s": 10.0,
+    "alarm_s": 3.16,
+    "final_alpha_hat": 0.7407407404008332,
+    "max_command_N": 23.150993317273603
+  },
+  "capacity_loss": {
+    "final_error_m": 5.0,
+    "peak_error_m": 5.0,
+    "end_time_s": 5.780469331081193,
+    "alarm_s": 3.14,
+    "final_alpha_hat": 0.5000009437279467,
+    "max_command_N": 28.0
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "light_down": {
+    "final_error_m": 0.017568709093861656,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 18.03198456658265,
+    "thrust_max_N": 23.696,
+    "TV_N": 5.928029036732454,
+    "peak_error_after4_m": 0.020997778063187145
+  },
+  "heavy_down": {
+    "final_error_m": 0.03877940913321165,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 21.1691305595878,
+    "thrust_max_N": 23.696,
+    "TV_N": 2.7929368890836024,
+    "peak_error_after4_m": 0.0419307203104351
+  },
+  "heavy_up": {
+    "final_error_m": 0.003642007099779576,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 7.6960000000000015,
+    "thrust_max_N": 16.586504324011074,
+    "TV_N": 9.241806259406179,
+    "peak_error_after4_m": 0.003642007099779576
+  },
+  "varying_force": {
+    "final_error_m": 0.021693115324572965,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 15.978037317172536,
+    "thrust_max_N": 23.696,
+    "TV_N": 81.2455447800801,
+    "peak_error_after4_m": 0.027007538935447606
+  },
+  "noise_phi005": {
+    "final_error_m": 0.03864813126616973,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 20.0276366281064,
+    "thrust_max_N": 23.67419257283072,
+    "TV_N": 543.8579529922984,
+    "peak_error_after4_m": 0.041900957039340714
+  },
+  "noise_phi002": {
+    "final_error_m": 0.015590854860184411,
+    "peak_error_m": 0.20000000000000018,
+    "end_time_s": 12.0,
+    "thrust_min_N": 19.72924094092842,
+    "thrust_max_N": 23.67419257283072,
+    "TV_N": 671.2508929913878,
+    "peak_error_after4_m": 0.01942972981500768
+  },
+  "limited": {
+    "final_error_m": 2.514949624494981,
+    "peak_error_m": 2.514949624494981,
+    "end_time_s": 4.0,
+    "thrust_min_N": 15.696000000000002,
+    "thrust_max_N": 17.8,
+    "TV_N": 2.103999999999999,
+    "peak_error_after4_m": 2.514949624494981
+  },
+  "step_refinement_max_h_m": 5.556878563872658e-05,
+  "steady_error_formula_m": 0.038778378378378366
+}

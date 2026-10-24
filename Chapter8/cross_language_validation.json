@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "cases": {
+    "active.csv": {
+      "rows": 1001,
+      "columns": 12,
+      "max_absolute_difference": 1.5987211554602254e-14
+    },
+    "capacity_loss.csv": {
+      "rows": 580,
+      "columns": 12,
+      "max_absolute_difference": 2.2737367544323206e-13
+    },
+    "delayed.csv": {
+      "rows": 1001,
+      "columns": 12,
+      "max_absolute_difference": 2.4868995751603507e-14
+    },
+    "force_ambiguity.csv": {
+      "rows": 1001,
+      "columns": 12,
+      "max_absolute_difference": 2.1316282072803006e-14
+    },
+    "passive.csv": {
+      "rows": 1001,
+      "columns": 12,
+      "max_absolute_difference": 1.7763568394002505e-14
+    }
+  },
+  "atol": 1e-08,
+  "rtol": 1e-09,
+  "date": "2026-10-25"
+}

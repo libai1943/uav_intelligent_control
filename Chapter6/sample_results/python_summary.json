@@ -1,0 +1,18 @@
+{
+  "off": {
+    "final_error_m": 0.22999999999998755,
+    "peak_error_m": 0.22999999999998755,
+    "end_time_s": 100.0
+  },
+  "frozen": {
+    "final_error_m": 0.06666666666664955,
+    "peak_error_m": 0.07905275600556072,
+    "end_time_s": 100.0
+  },
+  "online": {
+    "final_error_m": 1.7319479184152442e-14,
+    "peak_error_m": 0.07905275600556072,
+    "end_time_s": 100.0
+  },
+  "checks": "steady balances, frozen weights and learned compensation passed"
+}

@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "cases": {
+    "frozen.csv": {
+      "rows": 10001,
+      "columns": 14,
+      "max_absolute_difference": 5.329070518200751e-15
+    },
+    "off.csv": {
+      "rows": 10001,
+      "columns": 14,
+      "max_absolute_difference": 1.7763568394002505e-15
+    },
+    "online.csv": {
+      "rows": 10001,
+      "columns": 14,
+      "max_absolute_difference": 5.329070518200751e-15
+    }
+  },
+  "atol": 1e-08,
+  "rtol": 1e-09,
+  "date": "2026-10-25"
+}

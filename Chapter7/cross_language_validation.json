@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "cases": {
+    "heavy_down.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 3.552713678800501e-15
+    },
+    "heavy_up.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 3.552713678800501e-15
+    },
+    "light_down.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 7.105427357601002e-15
+    },
+    "limited.csv": {
+      "rows": 2001,
+      "columns": 11,
+      "max_absolute_difference": 3.552713678800501e-15
+    },
+    "noise_phi002.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 1.4210854715202004e-14
+    },
+    "noise_phi005.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 7.105427357601002e-15
+    },
+    "varying_force.csv": {
+      "rows": 6001,
+      "columns": 11,
+      "max_absolute_difference": 7.105427357601002e-15
+    }
+  },
+  "atol": 1e-08,
+  "rtol": 1e-09,
+  "date": "2026-10-25"
+}
