@@ -83,8 +83,6 @@ def generate(out, cases, simulate, Case, save_series, finish):
     ax.annotate('', xy=(11.2,hf), xytext=(11.2,r), arrowprops=arrows)
     ax.annotate(r'稳态误差 $e_{\mathrm{ss}}$', xy=(11.2,(hf+r)/2), xytext=(9.0,3.22),
                 fontsize=9, arrowprops={'arrowstyle':'-','color':'#777777','lw':.8})
-    ax.annotate('终值附近的 2% 带', xy=(8.0,hf+tol), xytext=(6.8,3.12), fontsize=9,
-                arrowprops={'arrowstyle':'->','color':'#777777','lw':.8})
     ax.set(xlim=(0,12), ylim=(1.70,3.33), yticks=np.arange(2,3.21,.2),
            xlabel='时间 $t$ / s', ylabel='高度 $h$ / m')
     finish(fig,'performance_overview')

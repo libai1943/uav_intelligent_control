@@ -11,14 +11,14 @@
 
 ## 前三章的运行方式
 
-进入对应章节目录，安装该章依赖后运行 Python 入口：
+第一、三章进入章节目录，第二章进入 `Chapter2/Python` 子目录。安装依赖后运行 Python 入口：
 
 ```bash
 python -m pip install -r requirements.txt
 python RunMe.py
 ```
 
-MATLAB 将当前文件夹切换到同一章节，执行 `RunMe`。第一、二章不需要附加工具箱；第三章需要 CasADi 3.7.2 的 MATLAB 发行包及其附带的 IPOPT，安装方法见 [Chapter3/README.md](Chapter3/README.md)。MATLAB 实现自行计算全部结果，不调用 Python。Windows 上建议将 Python 环境及 CasADi 二进制依赖安装在英文路径。
+MATLAB 的第二章入口位于 `Chapter2/MATLAB`，其余章按对应目录说明切换当前文件夹，执行 `RunMe`。第一、二章不需要附加工具箱；第三章需要 CasADi 3.7.2 的 MATLAB 发行包及其附带的 IPOPT，安装方法见 [Chapter3/README.md](Chapter3/README.md)。MATLAB 实现自行计算全部结果，不调用 Python。Windows 上建议将 Python 环境及 CasADi 二进制依赖安装在英文路径。
 
 两种实现都完成后，在章节目录执行：
 
@@ -31,7 +31,7 @@ python CheckResults.py
 | 章节 | Python 输出 | MATLAB 输出 | 核验记录 |
 | --- | --- | --- | --- |
 | 第一章 | `results/` | `results_matlab/` | `validation.json` |
-| 第二章 | `results/` | `results_matlab/` | `results/cross_language_check.json`；随库保存 `cross_language_validation.json` |
+| 第二章 | `Python/results/` | `MATLAB/results_matlab/` | `Python/results/cross_language_check.json`；随库保存 `cross_language_validation.json` |
 | 第三章 | `results_kinematic/` | `results_matlab/` | `validation.json` |
 
 第三章默认完成八组算例。初次体验可运行 `python RunMe.py --case four_corridor`；完整双语言核验需要先完成全部八组。图片采用中文字体，建议安装 Microsoft YaHei 或 Noto Sans CJK SC。生成附加 LaTeX 表格不要求安装 LaTeX。
