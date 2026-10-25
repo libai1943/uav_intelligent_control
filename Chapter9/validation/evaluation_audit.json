@@ -1,0 +1,216 @@
+{
+  "files": 42,
+  "episodes": 16800,
+  "checks": [
+    {
+      "file": "evaluation_fixed_mean_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.245004513516506e-16
+    },
+    {
+      "file": "evaluation_league_mean_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.106226635438361e-16
+    },
+    {
+      "file": "evaluation_rule_reactive_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_league_mirror_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.800116025829084e-16
+    },
+    {
+      "file": "evaluation_league_sampled_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_fixed_holdout_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.800116025829084e-16
+    },
+    {
+      "file": "evaluation_fixed_sampled_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_league_holdout_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.591949208711867e-16
+    },
+    {
+      "file": "evaluation_league_holdout_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    },
+    {
+      "file": "evaluation_league_mirror_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_fixed_sampled_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_league_sampled_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.036837696399289e-16
+    },
+    {
+      "file": "evaluation_league_mean_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_rule_center_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    },
+    {
+      "file": "evaluation_initial_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.800116025829084e-16
+    },
+    {
+      "file": "evaluation_initial_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.147060721024445e-16
+    },
+    {
+      "file": "evaluation_rule_max_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.38378239159465e-16
+    },
+    {
+      "file": "evaluation_fixed_holdout_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_league_blind_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.349087922075114e-16
+    },
+    {
+      "file": "evaluation_fixed_sampled_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.494005416219807e-16
+    },
+    {
+      "file": "evaluation_league_mean_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.494005416219807e-16
+    },
+    {
+      "file": "evaluation_fixed_mean_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.494005416219807e-16
+    },
+    {
+      "file": "evaluation_rule_fast_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_league_holdout_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.800116025829084e-16
+    },
+    {
+      "file": "evaluation_fixed_mean_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.418476861114186e-16
+    },
+    {
+      "file": "evaluation_league_sampled_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.494005416219807e-16
+    },
+    {
+      "file": "evaluation_league_blind_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    },
+    {
+      "file": "evaluation_rule_max_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.314393452555578e-16
+    },
+    {
+      "file": "evaluation_fixed_mirror_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.389922007661198e-16
+    },
+    {
+      "file": "evaluation_league_blind_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.938893903907228e-16
+    },
+    {
+      "file": "evaluation_rule_reactive_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.320533068622126e-16
+    },
+    {
+      "file": "evaluation_rule_reactive_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.869504964868156e-16
+    },
+    {
+      "file": "evaluation_rule_fast_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_rule_center_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_initial_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_fixed_mirror_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.453171330633722e-16
+    },
+    {
+      "file": "evaluation_fixed_holdout_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    },
+    {
+      "file": "evaluation_fixed_mirror_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.077671781985373e-16
+    },
+    {
+      "file": "evaluation_rule_fast_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.314393452555578e-16
+    },
+    {
+      "file": "evaluation_league_mirror_303.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 7.355227538141662e-16
+    },
+    {
+      "file": "evaluation_rule_max_101.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    },
+    {
+      "file": "evaluation_rule_center_202.csv",
+      "episodes": 400,
+      "reward_identity_max_error": 6.661338147750939e-16
+    }
+  ]
+}

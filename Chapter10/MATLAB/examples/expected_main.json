@@ -1,0 +1,21 @@
+{
+  "status": "ready",
+  "visit_order": [
+    "A",
+    "C"
+  ],
+  "skipped": [
+    "B"
+  ],
+  "reason_codes": [
+    "CLOSED_SKIPPED"
+  ],
+  "questions": [],
+  "evidence_ids": [
+    "F-A",
+    "F-B",
+    "F-C",
+    "F-M",
+    "U-01"
+  ]
+}

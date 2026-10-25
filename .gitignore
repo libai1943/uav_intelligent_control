@@ -19,3 +19,12 @@ Thumbs.db
 Chapter3/results_kinematic/
 
 Chapter4/results/
+
+# Generated runs; preserved book data are in Chapter9/reference_results.
+Chapter9/Python/outputs*/
+Chapter9/MATLAB/outputs*/
+Chapter10/Python/results/
+Chapter10/MATLAB/results/
+Chapter11/results/
+
+Chapter9/reference_results/python_book/figures/

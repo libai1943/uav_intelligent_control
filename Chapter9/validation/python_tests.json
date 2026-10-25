@@ -1,0 +1,14 @@
+{
+  "portable_rng": true,
+  "ppo_gradient_max_abs_error": 1.18853274444497e-10,
+  "critic_gradient_abs_error": 1.0842495304363986e-11,
+  "missed_gate_is_disqualification": true,
+  "swept_collision_time_error": 0.0,
+  "substep_finish_order": true,
+  "earliest_event_priority": true,
+  "potential_telescoping_max_error": 3.122502256758253e-16,
+  "acceleration_bound": true,
+  "exact_python_reproducibility": true,
+  "all_episodes_accounted_for": true,
+  "ppo_hand_calculation": true
+}

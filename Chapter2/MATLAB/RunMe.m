@@ -1,6 +1,6 @@
 function RunMe
 % 第二章独立 MATLAB 实现：无需 Python 或 Control System Toolbox。
-% MATLAB R2021b 测试；所有模型均采用单步显式欧拉法。
+% MATLAB R2021b；CSV采用显式欧拉，图2.6无阻尼基准单独使用解析解。
 root=fileparts(mfilename('fullpath')); out=fullfile(root,'results_matlab');
 if ~exist(out,'dir'), mkdir(out); end
 cfg=jsondecode(fileread(fullfile(root,'experiment_cases.json')));
@@ -15,13 +15,17 @@ for j=1:numel(cfg)
 end
 set(groot,'defaultFigureVisible','off','defaultAxesFontName','Microsoft YaHei',...
     'defaultTextFontName','Microsoft YaHei','defaultAxesFontSize',10);
-pair(S,{'stage_p','stage_no_drag'},{'有竖直阻尼','忽略竖直阻尼'},[3 4 8],{'高度 / m','竖直速度 / (m/s)','总推力 / N'},out,'stage1_p',14);
+Splot=S;d=S.stage_no_drag;tt=d(:,1);w=sqrt(4/1.6);
+d(:,3)=3+(d(1,3)-3)*cos(w*tt)+d(1,4)/w*sin(w*tt);
+d(:,4)=-(S.stage_no_drag(1,3)-3)*w*sin(w*tt)+S.stage_no_drag(1,4)*cos(w*tt);
+d(:,5)=3-d(:,3);d(:,8)=1.6*9.81+4*d(:,5);Splot.stage_no_drag=d;
+pair(Splot,{'stage_p','stage_no_drag'},{'有竖直阻尼','忽略竖直阻尼'},[3 4 8],{'高度 / m','竖直速度 / (m/s)','总推力 / N'},out,'stage1_p',14);
 pair(S,{'stage_p_wind','stage_p8_wind'},{'P: Kp=4','P: Kp=8'},[3 8],{'高度 / m','总推力 / N'},out,'stage2_bias',40);
 f=newfig(2); ax=subplot(2,1,1); hold(ax,'on');
-lineplot(ax,S.stage_p_wind,3,1,'P控制');lineplot(ax,S.stage_pi,3,2,'PI控制');yline(ax,3,':');ylabel(ax,'高度 / m');legend(ax,'Location','best','Box','off');
+lineplot(ax,S.stage_p_wind,3,1,'P控制');lineplot(ax,S.stage_pi,3,2,'PI控制');yline(ax,3,':');ylabel(ax,'高度 / m');legend(ax,'Location','northoutside','NumColumns',2,'Box','off');
 ax=subplot(2,1,2);hold(ax,'on');d=S.stage_pi;
 plot(ax,d(:,1),4*d(:,5),'Color',[.13 .49 .54],'DisplayName','比例修正');
-plot(ax,d(:,1),1.2*d(:,6),'--','Color',[.66 .43 .21],'DisplayName','积分补偿');ylabel(ax,'修正推力 / N');xlabel(ax,'时间 / s');legend(ax,'Location','best','Box','off');savefigs(f,out,'stage3_integral');
+plot(ax,d(:,1),1.2*d(:,6),'--','Color',[.66 .43 .21],'DisplayName','积分补偿');ylabel(ax,'修正推力 / N');xlabel(ax,'时间 / s');legend(ax,'Location','northoutside','NumColumns',2,'Box','off');savefigs(f,out,'stage3_integral');
 pair(S,{'stage_pi','stage_pid'},{'PI控制','PID控制'},[3 8],{'高度 / m','总推力 / N'},out,'stage4_derivative',40);
 f=newfig(3);d=S.stage_cascade;
 for q=1:3
@@ -29,7 +33,7 @@ for q=1:3
  if q==1,lineplot(ax,d,2,2,'参考高度');lineplot(ax,d,3,1,'实际高度');ylabel(ax,'高度 / m');
  elseif q==2,lineplot(ax,d,10,2,'参考速度');lineplot(ax,d,4,1,'实际速度');ylabel(ax,'竖直速度 / (m/s)');
  else,lineplot(ax,d,8,1,'总推力');ylabel(ax,'总推力 / N');xlabel(ax,'时间 / s');end
- legend(ax,'Location','best','Box','off');
+ legend(ax,'Location','northoutside','NumColumns',2,'Box','off');
 end
 savefigs(f,out,'stage5_cascade');
 pair(S,{'feedforward_open','feedback_hover'},{'仅重力前馈','同一前馈加反馈'},[3 8],{'高度 / m','总推力 / N'},out,'stage6_feedforward_feedback',12);
@@ -38,11 +42,11 @@ f=newfig(3);
 ax=subplot(3,1,1);hold(ax,'on');lineplot(ax,S.stage_cascade,4,1,'基准速度内环');lineplot(ax,S.cascade_slow_inner,4,2,'减小内环增益');lineplot(ax,S.stage_cascade,10,3,'基准参考速度');ylabel(ax,'竖直速度 / (m/s)');
 ax=subplot(3,1,2);hold(ax,'on');lineplot(ax,S.stage_cascade,3,1,'Kh=0.8');lineplot(ax,S.cascade_slow_outer,3,2,'Kh=0.4');ylabel(ax,'高度 / m');
 ax=subplot(3,1,3);hold(ax,'on');lineplot(ax,S.stage_cascade,3,1,'级联控制');lineplot(ax,S.tune_pid,3,2,'单环PID');ylabel(ax,'高度 / m');xlabel(ax,'时间 / s');
-for ax=findall(f,'Type','axes')',xlim(ax,[0 14]);legend(ax,'Location','best','Box','off');end
+for ax=findall(f,'Type','axes')',xlim(ax,[0 14]);legend(ax,'Location','northoutside','NumColumns',2,'Box','off');end
 savefigs(f,out,'stage8_cascade_comparison');
 f=newfig(2);d=S.cascade_large;ax=subplot(2,1,1);hold(ax,'on');lineplot(ax,d,3,1,'实际高度');yline(ax,3,':','参考高度');ylabel(ax,'高度 / m');
 ax=subplot(2,1,2);hold(ax,'on');plot(ax,d(:,1),.8*d(:,5),':','DisplayName','未限幅要求');lineplot(ax,d,10,1,'限幅后速度参考');lineplot(ax,d,4,2,'实际速度');ylabel(ax,'竖直速度 / (m/s)');xlabel(ax,'时间 / s');
-for ax=findall(f,'Type','axes')',xlim(ax,[0 14]);legend(ax,'Location','best','Box','off');end
+for ax=findall(f,'Type','axes')',xlim(ax,[0 14]);legend(ax,'Location','northoutside','NumColumns',2,'Box','off');end
 savefigs(f,out,'stage9_velocity_limit');
 % 章首阶跃图及性能指标，使用与Python相同的两个数值案例。
 f=newfig(1);ax=axes(f);hold(ax,'on');d=S.gain4;
@@ -96,7 +100,7 @@ for q=1:numel(cols)
  ax=subplot(numel(cols),1,q);hold(ax,'on');
  for j=1:numel(keys),lineplot(ax,S.(keys{j}),cols(q),j,labels{j});end
  if cols(q)==3,yline(ax,S.(keys{1})(1,2),':','HandleVisibility','off');end
- ylabel(ax,ylabs{q});xlim(ax,[0 tend]);if q==1,legend(ax,'Location','best','Box','off');end
+ ylabel(ax,ylabs{q});xlim(ax,[0 tend]);if q==1,legend(ax,'Location','northoutside','NumColumns',2,'Box','off');end
 end
 xlabel(ax,'时间 / s');savefigs(f,out,name);
 end

@@ -1,0 +1,61 @@
+{
+  "python_book_status": {
+    "status": "complete",
+    "runtime": "Python",
+    "profile": "book",
+    "seeds": [
+      101,
+      202,
+      303
+    ]
+  },
+  "python_quick_status": {
+    "status": "complete",
+    "runtime": "Python",
+    "profile": "quick",
+    "seeds": [
+      101
+    ]
+  },
+  "python_version": "3.13.5",
+  "numpy_version": "2.3.5",
+  "matplotlib_version": "3.10.8",
+  "training_seeds": [
+    101,
+    202,
+    303
+  ],
+  "methods": [
+    "fixed",
+    "league"
+  ],
+  "batches_per_model": 500,
+  "episodes_per_batch": 64,
+  "trained_models": 6,
+  "training_races_total": 192000,
+  "learner_decisions_total": 7128612,
+  "evaluation_files": 42,
+  "evaluation_races_total": 16800,
+  "matlab_executable": "MATLAB R2021b Update 7",
+  "octave_executable": null,
+  "native_matlab_executed": true,
+  "matlab_status": "RunTests and RunQuick passed on 2026-10-25. Quick profile: 20 batches, seed 101. Full 500-batch/3-seed profile not rerun.",
+  "python_numerical_checks": {
+    "portable_rng": true,
+    "ppo_gradient_max_abs_error": 1.1885331607786043e-10,
+    "critic_gradient_abs_error": 1.0842494870683117e-11,
+    "missed_gate_is_disqualification": true,
+    "swept_collision_time_error": 0.0,
+    "substep_finish_order": true,
+    "earliest_event_priority": true,
+    "potential_telescoping_max_error": 3.122502256758253e-16,
+    "acceleration_bound": true,
+    "exact_python_reproducibility": true,
+    "all_episodes_accounted_for": true,
+    "ppo_hand_calculation": true
+  },
+  "figure_note": "Figures generated from CSV records; Type 3 PDF glyphs avoid embedded-font loss when XeLaTeX imports figures.",
+  "training_note": "Fresh random initialization. No supplied model is loaded by the default training entry point.",
+  "full_python_results_provenance": "Complete results supplied with revised chapter; retained unchanged. Current merge reran numerical tests and quick training in both languages.",
+  "current_short_profile_comparison": "short_profile_comparison.json"
+}

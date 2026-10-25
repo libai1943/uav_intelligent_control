@@ -61,7 +61,12 @@ def generate():
     fig,axs=plt.subplots(3,1,figsize=(7,6.2),sharex=True,layout='constrained')
     axs[0].axhline(3,color='#888',ls=':',lw=1,label='参考高度')
     for i,(key,label) in enumerate([('stage_p','有竖直阻尼'),('stage_no_drag','忽略竖直阻尼')]):
-        dd=results[key]
+        dd=results[key].copy()
+        if key=='stage_no_drag':
+            omega=np.sqrt(4/r.M)
+            dd[:,2]=3-np.cos(omega*dd[:,0])
+            dd[:,3]=omega*np.sin(omega*dd[:,0])
+            dd[:,7]=r.M*r.G+4*(3-dd[:,2])
         for ax,col in zip(axs,[2,3,7]):
             ax.plot(dd[:,0],dd[:,col],color=r.C[i],ls=r.LS[i],label=label)
     ix=np.flatnonzero(d[:,2]>=3)[0];tc=d[ix,0];vc=d[ix,3]

@@ -1,0 +1,86 @@
+{
+  "profile": "book",
+  "training_seeds": [
+    101,
+    202,
+    303
+  ],
+  "config": {
+    "dt": 0.05,
+    "substeps": 4,
+    "time_limit": 24.0,
+    "speed_mid": 4.5,
+    "speed_scale": 2.0,
+    "accel_max": 6.0,
+    "velocity_tau": 0.35,
+    "lateral_gain": 2.2,
+    "lateral_speed_max": 2.2,
+    "vertical_speed_max": 1.6,
+    "gate_margin": 0.3,
+    "separation": 0.8,
+    "offset_fraction": 0.8,
+    "beta": 1.0,
+    "gamma": 1.0,
+    "hidden": 24,
+    "actor_lr": 0.0005,
+    "critic_lr": 0.0015,
+    "ppo_clip": 0.2,
+    "epochs": 4,
+    "minibatch": 256,
+    "grad_clip": 0.7,
+    "initial_std": 0.45,
+    "std_min": 0.07,
+    "std_max": 0.65,
+    "batch_episodes": 64,
+    "iterations": 500,
+    "snapshot_every": 10,
+    "pool_capacity": 6,
+    "eval_every": 10,
+    "eval_episodes": 400,
+    "max_kl": 0.03
+  },
+  "gates": [
+    [
+      10.0,
+      0.0,
+      2.5,
+      3.6,
+      2.2
+    ],
+    [
+      20.0,
+      1.5,
+      3.0,
+      3.2,
+      2.0
+    ],
+    [
+      30.0,
+      -1.0,
+      2.4,
+      1.2,
+      1.0
+    ],
+    [
+      40.0,
+      1.0,
+      3.0,
+      3.2,
+      2.0
+    ],
+    [
+      50.0,
+      0.0,
+      2.5,
+      2.6,
+      1.8
+    ]
+  ],
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "numpy": "2.3.5",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "runtime": "Python (native)",
+  "matlab_runtime_verified": false,
+  "explanation": "All PPO policies are trained from random initialization; shipped models are not loaded by this entry point.",
+  "elapsed_seconds": 110.92547411700002
+}

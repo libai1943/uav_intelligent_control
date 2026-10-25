@@ -13,12 +13,13 @@ def save(name,data,header):
     np.savetxt(OUT/(name+'.csv'),data,delimiter=',',header=header,comments='',fmt='%.17g')
 def panel(name,series,columns,ylabels,limits=None):
     fig,axs=plt.subplots(len(columns),1,figsize=(8,2.0*len(columns)),sharex=True,squeeze=False,layout='constrained')
-    colors=['#217d8a','#a86e36','#6c5797','#525252','#4d8049'];styles=['-','--','-.',':','--']
+    colors=['#217d8a','#a86e36','#6c5797','#525252','#4d8049'];styles=['-','-','-.',':','--']
     for ax,col,yl in zip(axs[:,0],columns,ylabels):
         for j,(label,d) in enumerate(series):ax.plot(d[:,0],d[:,col],color=colors[j%5],ls=styles[j%5],label=label,lw=1.5)
         ax.set_ylabel(yl);ax.grid(alpha=.2)
     axs[0,0].legend(loc='lower left',bbox_to_anchor=(0,1.01),ncol=min(3,len(series)),frameon=False,fontsize=8.5)
     axs[-1,0].set_xlabel('时间 / s')
+    if name=='rise':axs[-1,0].set_xlim(0,6)
     if limits:
         for idx,values in limits.items():
             for val in values:axs[idx,0].axhline(val,color='#999',ls=':',lw=.8)

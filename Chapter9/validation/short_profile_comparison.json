@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "cases": {
+    "evaluation_fixed_holdout_101.csv": 6.8833827526759706e-15,
+    "evaluation_fixed_mean_101.csv": 7.993605777301127e-15,
+    "evaluation_fixed_mirror_101.csv": 1.0658141036401503e-14,
+    "evaluation_fixed_sampled_101.csv": 3.197442310920451e-14,
+    "evaluation_initial_101.csv": 8.881784197001252e-16,
+    "evaluation_league_blind_101.csv": 1.1102230246251565e-15,
+    "evaluation_league_holdout_101.csv": 1.3322676295501878e-14,
+    "evaluation_league_mean_101.csv": 1.0658141036401503e-14,
+    "evaluation_league_mirror_101.csv": 6.772360450213455e-15,
+    "evaluation_league_sampled_101.csv": 1.0658141036401503e-14,
+    "evaluation_rule_center_101.csv": 0.0,
+    "evaluation_rule_fast_101.csv": 0.0,
+    "evaluation_rule_max_101.csv": 0.0,
+    "evaluation_rule_reactive_101.csv": 0.0
+  },
+  "profile": "quick",
+  "seed": 101,
+  "iterations": 20,
+  "book_training_rerun": false
+}

@@ -1,0 +1,1274 @@
+{
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "solver_interface": "scipy.optimize.linprog/milp (HiGHS)",
+    "paired_matlab_validation": "matlab_results.json; native MATLAB R2021b executed independently"
+  },
+  "single_aircraft_lp": {
+    "variables_kg": [
+      4.0,
+      6.0
+    ],
+    "net_return_yuan": 40.0,
+    "fuel_L": 1.4,
+    "resource_use": [
+      10.0,
+      14.0
+    ],
+    "resource_bounds": [
+      10.0,
+      14.0
+    ],
+    "resource_slack": [
+      0.0,
+      0.0
+    ],
+    "vertices": [
+      {
+        "q_A": -0.0,
+        "q_B": -0.0,
+        "net_return_yuan": -4.0
+      },
+      {
+        "q_A": 0.0,
+        "q_B": 10.0,
+        "net_return_yuan": 36.0
+      },
+      {
+        "q_A": 4.0,
+        "q_B": 6.0,
+        "net_return_yuan": 40.0
+      },
+      {
+        "q_A": 7.0,
+        "q_B": -0.0,
+        "net_return_yuan": 31.0
+      }
+    ],
+    "upper_bound_certificate": "5*q_A+4*q_B-4=3*(q_A+q_B)+(2*q_A+q_B)-4<=40",
+    "verified_by_independent_vertex_enumeration": true,
+    "sensitivities": {
+      "warehouse_15": {
+        "variables_kg": [
+          5.0,
+          5.0
+        ],
+        "net_return_yuan": 41.0,
+        "fuel_L": 1.4,
+        "resource_bounds": [
+          10,
+          15
+        ]
+      },
+      "payload_11": {
+        "variables_kg": [
+          3.0,
+          8.0
+        ],
+        "net_return_yuan": 43.0,
+        "fuel_L": 1.5,
+        "resource_bounds": [
+          11,
+          14
+        ]
+      }
+    }
+  },
+  "two_aircraft_transport_lp": {
+    "variable_order": [
+      "q11",
+      "q12",
+      "q21",
+      "q22"
+    ],
+    "variables_kg": [
+      6.0,
+      0.0,
+      -0.0,
+      4.0
+    ],
+    "unit_cost": [
+      2.0,
+      5.0,
+      4.0,
+      1.0
+    ],
+    "minimum_cost": 16.0,
+    "aircraft_load_kg": [
+      6.0,
+      4.0
+    ],
+    "receiver_deliveries_kg": [
+      6.0,
+      4.0
+    ],
+    "maximum_linear_constraint_violation": 0.0,
+    "lower_bound_certificate": "cost=16+2*q21+4*q12>=16",
+    "exact_lower_bound": 16.0,
+    "certificate_reduced_costs": [
+      0.0,
+      4.0,
+      2.0,
+      0.0
+    ],
+    "checked_absolute_gap": 0.0,
+    "validation_tolerance": 1e-05
+  },
+  "scheduling": {
+    "baseline": {
+      "data": {
+        "p": [
+          [
+            4.0,
+            6.0,
+            5.0,
+            7.0
+          ],
+          [
+            7.0,
+            4.0,
+            6.0,
+            5.0
+          ]
+        ],
+        "r": [
+          0.0,
+          0.0,
+          2.0,
+          1.0
+        ],
+        "d": [
+          12.0,
+          12.0,
+          14.0,
+          13.0
+        ],
+        "available": [
+          1,
+          1
+        ]
+      },
+      "milp": {
+        "status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "success": true,
+        "objective": 9.0,
+        "x": [
+          [
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "starts": [
+          0.0,
+          0.0,
+          4.0,
+          4.0
+        ],
+        "completions": [
+          4.0,
+          4.0,
+          9.0,
+          9.0
+        ],
+        "directional_M": [
+          [
+            12.0,
+            12.0,
+            10.0,
+            11.0
+          ],
+          [
+            12.0,
+            12.0,
+            10.0,
+            11.0
+          ],
+          [
+            14.0,
+            14.0,
+            12.0,
+            13.0
+          ],
+          [
+            13.0,
+            13.0,
+            11.0,
+            12.0
+          ]
+        ],
+        "assignment_aircraft_1_based": [
+          1,
+          2,
+          1,
+          2
+        ],
+        "y_for_unordered_pairs": {
+          "1,2": 0,
+          "1,3": 1,
+          "1,4": 0,
+          "2,3": 0,
+          "2,4": 1,
+          "3,4": 0
+        },
+        "schedule_makespan": 9.0,
+        "maximum_linear_constraint_violation": 0.0,
+        "validation_tolerance": 1e-05,
+        "mip_gap": 0.0,
+        "mip_dual_bound": 9.0,
+        "checks": {
+          "all_tasks_assigned_once": true,
+          "release_deadline_duration_ok": true,
+          "same_aircraft_nonoverlap_ok": true
+        }
+      },
+      "enumeration": {
+        "enumerated_assignment_order_combinations": 120,
+        "feasible_assignment_order_combinations": 16,
+        "optimal_objective": 9.0,
+        "optimal_earliest_schedules": [
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            "starts": [
+              0.0,
+              0.0,
+              4.0,
+              4.0
+            ],
+            "completions": [
+              4.0,
+              4.0,
+              9.0,
+              9.0
+            ]
+          }
+        ],
+        "all_feasible_earliest_schedules": [
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              1,
+              2,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "starts": [
+              0.0,
+              4.0,
+              2.0,
+              8.0
+            ],
+            "completions": [
+              4.0,
+              10.0,
+              8.0,
+              13.0
+            ],
+            "makespan": 13.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              1,
+              2,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                2
+              ],
+              [
+                4,
+                3
+              ]
+            ],
+            "starts": [
+              0.0,
+              4.0,
+              6.0,
+              1.0
+            ],
+            "completions": [
+              4.0,
+              10.0,
+              12.0,
+              6.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              1,
+              2,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "starts": [
+              6.0,
+              0.0,
+              2.0,
+              8.0
+            ],
+            "completions": [
+              10.0,
+              6.0,
+              8.0,
+              13.0
+            ],
+            "makespan": 13.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              1,
+              2,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                2,
+                1
+              ],
+              [
+                4,
+                3
+              ]
+            ],
+            "starts": [
+              6.0,
+              0.0,
+              6.0,
+              1.0
+            ],
+            "completions": [
+              10.0,
+              6.0,
+              12.0,
+              6.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                3
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            "starts": [
+              0.0,
+              0.0,
+              4.0,
+              4.0
+            ],
+            "completions": [
+              4.0,
+              4.0,
+              9.0,
+              9.0
+            ],
+            "makespan": 9.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                3
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            "starts": [
+              0.0,
+              6.0,
+              4.0,
+              1.0
+            ],
+            "completions": [
+              4.0,
+              10.0,
+              9.0,
+              6.0
+            ],
+            "makespan": 10.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            "starts": [
+              7.0,
+              0.0,
+              2.0,
+              4.0
+            ],
+            "completions": [
+              11.0,
+              4.0,
+              7.0,
+              9.0
+            ],
+            "makespan": 11.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            "starts": [
+              7.0,
+              6.0,
+              2.0,
+              1.0
+            ],
+            "completions": [
+              11.0,
+              10.0,
+              7.0,
+              6.0
+            ],
+            "makespan": 11.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              2,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "starts": [
+              0.0,
+              0.0,
+              4.0,
+              4.0
+            ],
+            "completions": [
+              4.0,
+              4.0,
+              10.0,
+              11.0
+            ],
+            "makespan": 11.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              2,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                1,
+                4
+              ],
+              [
+                3,
+                2
+              ]
+            ],
+            "starts": [
+              0.0,
+              8.0,
+              2.0,
+              4.0
+            ],
+            "completions": [
+              4.0,
+              12.0,
+              8.0,
+              11.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              2,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                4,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "starts": [
+              8.0,
+              0.0,
+              4.0,
+              1.0
+            ],
+            "completions": [
+              12.0,
+              4.0,
+              10.0,
+              8.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              2,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                4,
+                1
+              ],
+              [
+                3,
+                2
+              ]
+            ],
+            "starts": [
+              8.0,
+              8.0,
+              2.0,
+              1.0
+            ],
+            "completions": [
+              12.0,
+              12.0,
+              8.0,
+              8.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              2,
+              1,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                2,
+                3
+              ],
+              [
+                1,
+                4
+              ]
+            ],
+            "starts": [
+              0.0,
+              0.0,
+              6.0,
+              7.0
+            ],
+            "completions": [
+              7.0,
+              6.0,
+              11.0,
+              12.0
+            ],
+            "makespan": 12.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              2,
+              1,
+              2,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                2,
+                4
+              ],
+              [
+                1,
+                3
+              ]
+            ],
+            "starts": [
+              0.0,
+              0.0,
+              7.0,
+              6.0
+            ],
+            "completions": [
+              7.0,
+              6.0,
+              13.0,
+              13.0
+            ],
+            "makespan": 13.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              2,
+              2,
+              1,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                4,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "starts": [
+              0.0,
+              7.0,
+              8.0,
+              1.0
+            ],
+            "completions": [
+              7.0,
+              11.0,
+              13.0,
+              8.0
+            ],
+            "makespan": 13.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              2,
+              2,
+              1,
+              1
+            ],
+            "orders_tasks_1_based": [
+              [
+                4,
+                3
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "starts": [
+              4.0,
+              0.0,
+              8.0,
+              1.0
+            ],
+            "completions": [
+              11.0,
+              4.0,
+              13.0,
+              8.0
+            ],
+            "makespan": 13.0
+          }
+        ],
+        "feasible_makespan_histogram": {
+          "9.0": 1,
+          "10.0": 1,
+          "11.0": 3,
+          "12.0": 6,
+          "13.0": 5
+        }
+      },
+      "decoder_exhaustive_check": {
+        "encoding": "task permutation plus per-task aircraft assignment",
+        "enumerated_encodings": 384,
+        "feasible_encodings": 96,
+        "best_objective": 9.0,
+        "matches_exact_schedule_enumeration": true,
+        "automatic_constraints": [
+          "unique task assignment",
+          "release time",
+          "same-aircraft nonoverlap"
+        ],
+        "checked_not_automatic": [
+          "deadline",
+          "aircraft availability"
+        ]
+      },
+      "split_decoder_exhaustive_check": {
+        "encoding": "task permutation plus cut position (two aircraft)",
+        "enumerated_encodings": 120,
+        "distinct_pairs_of_ordered_lists": 120,
+        "feasible_encodings": 16,
+        "best_objective": 9.0,
+        "one_to_one_with_pairs_of_local_ordered_lists": true,
+        "matches_exact_schedule_enumeration": true
+      }
+    },
+    "deadline_3_is_7": {
+      "data": {
+        "p": [
+          [
+            4.0,
+            6.0,
+            5.0,
+            7.0
+          ],
+          [
+            7.0,
+            4.0,
+            6.0,
+            5.0
+          ]
+        ],
+        "r": [
+          0.0,
+          0.0,
+          2.0,
+          1.0
+        ],
+        "d": [
+          12.0,
+          12.0,
+          7.0,
+          13.0
+        ],
+        "available": [
+          1,
+          1
+        ]
+      },
+      "milp": {
+        "status": 0,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+        "success": true,
+        "objective": 11.0,
+        "x": [
+          [
+            1.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "starts": [
+          7.0,
+          7.0,
+          2.0,
+          1.0
+        ],
+        "completions": [
+          11.0,
+          11.0,
+          7.0,
+          6.0
+        ],
+        "directional_M": [
+          [
+            12.0,
+            12.0,
+            10.0,
+            11.0
+          ],
+          [
+            12.0,
+            12.0,
+            10.0,
+            11.0
+          ],
+          [
+            7.0,
+            7.0,
+            5.0,
+            6.0
+          ],
+          [
+            13.0,
+            13.0,
+            11.0,
+            12.0
+          ]
+        ],
+        "assignment_aircraft_1_based": [
+          1,
+          2,
+          1,
+          2
+        ],
+        "y_for_unordered_pairs": {
+          "1,2": 0,
+          "1,3": 0,
+          "1,4": 0,
+          "2,3": 0,
+          "2,4": 0,
+          "3,4": 0
+        },
+        "schedule_makespan": 11.0,
+        "maximum_linear_constraint_violation": 0.0,
+        "validation_tolerance": 1e-05,
+        "mip_gap": 0.0,
+        "mip_dual_bound": 11.0,
+        "checks": {
+          "all_tasks_assigned_once": true,
+          "release_deadline_duration_ok": true,
+          "same_aircraft_nonoverlap_ok": true
+        }
+      },
+      "enumeration": {
+        "enumerated_assignment_order_combinations": 120,
+        "feasible_assignment_order_combinations": 2,
+        "optimal_objective": 11.0,
+        "optimal_earliest_schedules": [
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            "starts": [
+              7.0,
+              0.0,
+              2.0,
+              4.0
+            ],
+            "completions": [
+              11.0,
+              4.0,
+              7.0,
+              9.0
+            ]
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            "starts": [
+              7.0,
+              6.0,
+              2.0,
+              1.0
+            ],
+            "completions": [
+              11.0,
+              10.0,
+              7.0,
+              6.0
+            ]
+          }
+        ],
+        "all_feasible_earliest_schedules": [
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                2,
+                4
+              ]
+            ],
+            "starts": [
+              7.0,
+              0.0,
+              2.0,
+              4.0
+            ],
+            "completions": [
+              11.0,
+              4.0,
+              7.0,
+              9.0
+            ],
+            "makespan": 11.0
+          },
+          {
+            "assignment_aircraft_1_based": [
+              1,
+              2,
+              1,
+              2
+            ],
+            "orders_tasks_1_based": [
+              [
+                3,
+                1
+              ],
+              [
+                4,
+                2
+              ]
+            ],
+            "starts": [
+              7.0,
+              6.0,
+              2.0,
+              1.0
+            ],
+            "completions": [
+              11.0,
+              10.0,
+              7.0,
+              6.0
+            ],
+            "makespan": 11.0
+          }
+        ],
+        "feasible_makespan_histogram": {
+          "11.0": 2
+        }
+      },
+      "decoder_exhaustive_check": {
+        "encoding": "task permutation plus per-task aircraft assignment",
+        "enumerated_encodings": 384,
+        "feasible_encodings": 12,
+        "best_objective": 11.0,
+        "matches_exact_schedule_enumeration": true,
+        "automatic_constraints": [
+          "unique task assignment",
+          "release time",
+          "same-aircraft nonoverlap"
+        ],
+        "checked_not_automatic": [
+          "deadline",
+          "aircraft availability"
+        ]
+      },
+      "split_decoder_exhaustive_check": {
+        "encoding": "task permutation plus cut position (two aircraft)",
+        "enumerated_encodings": 120,
+        "distinct_pairs_of_ordered_lists": 120,
+        "feasible_encodings": 2,
+        "best_objective": 11.0,
+        "one_to_one_with_pairs_of_local_ordered_lists": true,
+        "matches_exact_schedule_enumeration": true
+      }
+    },
+    "aircraft_2_unavailable": {
+      "data": {
+        "p": [
+          [
+            4.0,
+            6.0,
+            5.0,
+            7.0
+          ],
+          [
+            7.0,
+            4.0,
+            6.0,
+            5.0
+          ]
+        ],
+        "r": [
+          0.0,
+          0.0,
+          2.0,
+          1.0
+        ],
+        "d": [
+          12.0,
+          12.0,
+          14.0,
+          13.0
+        ],
+        "available": [
+          1,
+          0
+        ]
+      },
+      "milp": {
+        "status": 2,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+        "success": false
+      },
+      "enumeration": {
+        "enumerated_assignment_order_combinations": 24,
+        "feasible_assignment_order_combinations": 0,
+        "optimal_objective": null,
+        "optimal_earliest_schedules": [],
+        "all_feasible_earliest_schedules": [],
+        "feasible_makespan_histogram": {}
+      },
+      "decoder_exhaustive_check": {
+        "encoding": "task permutation plus per-task aircraft assignment",
+        "enumerated_encodings": 24,
+        "feasible_encodings": 0,
+        "best_objective": null,
+        "matches_exact_schedule_enumeration": true,
+        "automatic_constraints": [
+          "unique task assignment",
+          "release time",
+          "same-aircraft nonoverlap"
+        ],
+        "checked_not_automatic": [
+          "deadline",
+          "aircraft availability"
+        ]
+      },
+      "split_decoder_exhaustive_check": {
+        "encoding": "task permutation plus cut position (two aircraft)",
+        "enumerated_encodings": 120,
+        "distinct_pairs_of_ordered_lists": 120,
+        "feasible_encodings": 0,
+        "best_objective": null,
+        "one_to_one_with_pairs_of_local_ordered_lists": true,
+        "matches_exact_schedule_enumeration": true
+      }
+    }
+  },
+  "wrong_constant_M_8": {
+    "status": 2,
+    "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+    "success": false
+  },
+  "lp_relaxation_baseline": {
+    "status": 0,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "success": true,
+    "objective": 7.0,
+    "x": [
+      [
+        0.5,
+        0.5,
+        1.0,
+        0.5
+      ],
+      [
+        0.5,
+        0.5,
+        0.0,
+        0.5
+      ]
+    ],
+    "starts": [
+      0.0,
+      0.0,
+      2.0,
+      1.0
+    ],
+    "completions": [
+      5.5,
+      5.0,
+      7.0,
+      7.0
+    ],
+    "directional_M": [
+      [
+        12.0,
+        12.0,
+        10.0,
+        11.0
+      ],
+      [
+        12.0,
+        12.0,
+        10.0,
+        11.0
+      ],
+      [
+        14.0,
+        14.0,
+        12.0,
+        13.0
+      ],
+      [
+        13.0,
+        13.0,
+        11.0,
+        12.0
+      ]
+    ]
+  },
+  "lp_relaxation_M_1000": {
+    "status": 0,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "success": true,
+    "objective": 7.0,
+    "x": [
+      [
+        1.0,
+        0.993,
+        1.0,
+        0.5
+      ],
+      [
+        0.0,
+        0.007000000000000006,
+        0.0,
+        0.5
+      ]
+    ],
+    "starts": [
+      0.0,
+      0.0,
+      2.0,
+      1.0
+    ],
+    "completions": [
+      4.0,
+      5.986000000000001,
+      7.0,
+      7.0
+    ],
+    "directional_M": [
+      [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      [
+        1000.0,
+        1000.0,
+        1000.0,
+        1000.0
+      ]
+    ]
+  },
+  "physical_workload_lower_bound_baseline": 9.0
+}

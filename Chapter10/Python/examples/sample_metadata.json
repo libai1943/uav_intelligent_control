@@ -1,0 +1,66 @@
+[
+  {
+    "line_number": 1,
+    "case_id": "S01-A",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "正文完整实例；在已给定的跳过授权下略去暂停的B。"
+  },
+  {
+    "line_number": 2,
+    "case_id": "S01-B",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "已知暂停目标仍被明确要求，且没有跳过授权；非ready的两张目标列表均为空。"
+  },
+  {
+    "line_number": 3,
+    "case_id": "S01-C",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "B原本就不在任务中；不能把它填写成skipped。"
+  },
+  {
+    "line_number": 4,
+    "case_id": "S01-D",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "本例接口需要唯一顺序，列举对象本身不表达先后。"
+  },
+  {
+    "line_number": 5,
+    "case_id": "S02-A",
+    "group_id": "BASE-S02",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "与正文同一句原话，但B的有效状态变化；输入必须包含该状态。"
+  },
+  {
+    "line_number": 6,
+    "case_id": "S03-A",
+    "group_id": "BASE-S03",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "资料身份和快照有效，不等于每个必要字段均已知。"
+  },
+  {
+    "line_number": 7,
+    "case_id": "S01-E",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "获准跳过后没有任何目标，按接口不能生成ready候选。"
+  },
+  {
+    "line_number": 8,
+    "case_id": "S01-F",
+    "group_id": "BASE-S01",
+    "origin": "作者依据本章规则构造的教学样本，非模型实测",
+    "review_status": "已逐字段核对正文约定；未经过真实业务领域人员验收",
+    "note": "没有可据以取舍的更高优先级，不能静默选择一句。"
+  }
+]

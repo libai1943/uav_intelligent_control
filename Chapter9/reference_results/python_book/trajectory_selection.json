@@ -1,0 +1,21 @@
+{
+  "seed": 1810101,
+  "episode": 1,
+  "rule": "first initially trailing winner vs held-out fast opponent; otherwise first winner, otherwise episode 0",
+  "result": [
+    1.0,
+    3.0,
+    1.0,
+    1.0,
+    0.0,
+    8.246813323772194,
+    5.0,
+    4.0,
+    1.3461593559361325,
+    6.000000000000001,
+    0.9777827059048148,
+    -0.044449372571481405,
+    0.022217294095185254,
+    0.04444937257148141
+  ]
+}

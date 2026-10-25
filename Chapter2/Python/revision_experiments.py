@@ -36,7 +36,7 @@ def generate():
     axs[-1].set_xlabel('时间 $t$ / s');r.finish(fig,'stage7_antiwindup')
     # 三个受控对照分别回答内环、外环和结构接口问题。
     baseline=np.loadtxt(r.OUT/'stage_cascade.csv',delimiter=',',skiprows=1)
-    fig,axs=plt.subplots(3,1,figsize=(7,6.4),sharex=True,layout='constrained')
+    fig,axs=plt.subplots(3,1,figsize=(7,7.0),sharex=True,layout='constrained')
     d=ds['cascade_slow_inner']
     axs[0].plot(baseline[:,0],baseline[:,3],color=r.C[0],label='速度内环 $K_v=5, K_{iv}=2$')
     axs[0].plot(d[:,0],d[:,3],color=r.C[1],ls='--',label='速度内环 $K_v=2, K_{iv}=0.8$')
@@ -48,15 +48,15 @@ def generate():
     axs[2].plot(baseline[:,0],baseline[:,2],color=r.C[0],label='高度—速度级联')
     axs[2].plot(d[:,0],d[:,2],color=r.C[1],ls='--',label='单环 PID')
     for ax in axs:
-        ax.set_xlim(0,14);ax.legend(frameon=False,ncol=1,fontsize=8.5,loc='lower right')
+        ax.set_xlim(0,14);ax.legend(frameon=False,ncol=2,fontsize=8.5,loc='lower center',bbox_to_anchor=(.5,1.02))
     for ax,label in zip(axs,['竖直速度 / (m/s)','高度 / m','高度 / m']):ax.set_ylabel(label)
     axs[-1].set_xlabel('时间 $t$ / s');r.finish(fig,'stage8_cascade_comparison')
     d=ds['cascade_large']
-    fig,axs=plt.subplots(2,1,figsize=(7,4.7),sharex=True,layout='constrained')
+    fig,axs=plt.subplots(2,1,figsize=(7,5.1),sharex=True,layout='constrained')
     axs[0].plot(d[:,0],d[:,2],color=r.C[0],label='实际高度');axs[0].axhline(3,ls=':',color='#888',label='参考高度')
     for val,label,color,style in [(.8*d[:,4],'未限幅速度要求',r.C[1],':'),(d[:,9],'限幅后参考速度',r.C[0],'-'),(d[:,3],'实际速度',r.C[2],'--')]:
         axs[1].plot(d[:,0],val,color=color,ls=style,label=label)
-    for ax in axs:ax.set_xlim(0,14);ax.legend(frameon=False,fontsize=9,ncol=1,loc='lower right')
+    for ax in axs:ax.set_xlim(0,14);ax.legend(frameon=False,fontsize=9,ncol=2,loc='lower center',bbox_to_anchor=(.5,1.02))
     axs[0].set_ylabel('高度 / m');axs[1].set_ylabel('竖直速度 / (m/s)');axs[-1].set_xlabel('时间 $t$ / s')
     r.finish(fig,'stage9_velocity_limit')
     metrics={c.name:r.step_metrics(ds[c.name][ds[c.name][:,0]<14],c.h0,c.r) for c in cases}

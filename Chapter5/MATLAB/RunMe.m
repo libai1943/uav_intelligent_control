@@ -34,10 +34,11 @@ assert(all(isfinite(d(:))));p=fullfile(out,[name '.csv']);f=fopen(p,'w');fprintf
 end
 function panel(out,name,series,labels,cols,ylabs)
 f=figure('Visible','off','Color','w','Position',[100 100 850 220*numel(cols)]);tl=tiledlayout(numel(cols),1,'TileSpacing','compact','Padding','compact');
-cc=[.13 .49 .54;.66 .43 .21;.42 .34 .59;.32 .32 .32;.30 .50 .28];styles={'-','--','-.',':','--'};
+cc=[.13 .49 .54;.66 .43 .21;.42 .34 .59;.32 .32 .32;.30 .50 .28];styles={'-','-','-.',':','--'};
 for j=1:numel(cols)
  ax=nexttile;hold(ax,'on');
  for k=1:numel(series),d=series{k};plot(ax,d(:,1),d(:,cols(j)),'Color',cc(mod(k-1,5)+1,:),'LineStyle',styles{mod(k-1,5)+1},'LineWidth',1.3);end
+ if strcmp(name,'rise'),xlim(ax,[0 6]);end
  ylabel(ylabs{j});grid on;box off;if j==1,legend(labels,'Location','northoutside','NumColumns',min(3,numel(series)),'Box','off');end
 end
 xlabel(tl,'Time / s');exportgraphics(f,fullfile(out,[name '.pdf']),'ContentType','vector');exportgraphics(f,fullfile(out,[name '.png']),'Resolution',160);close(f);
