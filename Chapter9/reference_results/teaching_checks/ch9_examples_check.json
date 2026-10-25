@@ -1,0 +1,63 @@
+{
+  "training_repeated": false,
+  "frozen_model": "league_101.json",
+  "evaluation_seed": 1810201,
+  "evaluation_episodes": 20,
+  "selection_rule": "first episode with at least two R2 reference speed changes",
+  "episode_zero_based": 0,
+  "selected_records": [
+    {
+      "time": 1.4000000000000006,
+      "xA_minus_xB": 2.5747549343114775,
+      "yA_minus_yB": 1.0137811339648228,
+      "transverse_distance": 1.0898192659618553,
+      "next_gate_B": 1,
+      "vx_ref_A": 6.433659156438326,
+      "vx_ref_B": 5.1,
+      "norm_offset_A": -0.584504707661394,
+      "norm_offset_B": -0.65,
+      "dy_gate_A": -0.7014056491936729,
+      "dy_gate_B": -0.7800000000000001,
+      "gap_to_narrow_B": 24.077920931969846
+    },
+    {
+      "time": 1.6000000000000008,
+      "xA_minus_xB": 2.83720206024009,
+      "yA_minus_yB": 0.8879173085060138,
+      "transverse_distance": 0.9806239693054198,
+      "next_gate_B": 1,
+      "vx_ref_A": 6.450135206163107,
+      "vx_ref_B": 4.0,
+      "norm_offset_A": 0.05548883469064568,
+      "norm_offset_B": -0.65,
+      "dy_gate_A": 0.06658660162877483,
+      "dy_gate_B": -0.7800000000000001,
+      "gap_to_narrow_B": 23.061361641697545
+    },
+    {
+      "time": 1.800000000000001,
+      "xA_minus_xB": 3.144822495427869,
+      "yA_minus_yB": 0.7381721562497713,
+      "transverse_distance": 0.8579222277372465,
+      "next_gate_B": 1,
+      "vx_ref_A": 6.426194886814996,
+      "vx_ref_B": 5.1,
+      "norm_offset_A": -0.6766850150930476,
+      "norm_offset_B": -0.65,
+      "dy_gate_A": -0.7037524156967695,
+      "dy_gate_B": -0.7800000000000001,
+      "gap_to_narrow_B": 22.086032262191964
+    }
+  ],
+  "numeric_examples": {
+    "gaussian_raw": 0.15000000000000002,
+    "normalized": 0.14888503362331798,
+    "physical_speed": 4.797770067246636,
+    "gradient_mu": -2.0000000000000004,
+    "mu_new": 0.19,
+    "density_ratio_new": 1.046027859908717,
+    "logistic_update_probability": 0.52497918747894,
+    "bootstrap_G1": 8.5,
+    "bootstrap_G0": 7.65
+  }
+}

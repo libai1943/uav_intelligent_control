@@ -1,5 +1,8 @@
 {
   "python_unit_tests": 14,
   "matlab_entry_passed": true,
-  "complete_prompt_identical": true
+  "complete_prompt_identical": true,
+  "revised_skip_then_order_rule": true,
+  "empty_target_blocked_rule": true,
+  "test_workspace": "UTF-8 file test used an ordinary workspace directory; default Python temporary-directory ACL was unavailable in this sandbox."
 }
