@@ -38,7 +38,8 @@ def simulate(kind='active',alpha=.65,delay=0,force=0,dt=.01,tf=10):
             count=count+1 if res>1.6 else 0
             if count>=12 and not alarm:alarm=True;td=t
         else:res=0
-        enabled=kind=='active' and alarm and t>=td+delay-1e-12
+        estimate_valid=bool(k and fu>=5 and np.isfinite(fy) and np.isfinite(fu))
+        enabled=kind=='active' and alarm and estimate_valid and t>=td+delay-1e-12
         used=ahat if enabled else 1.
         desired=1.6*9.81+40*(5-h)-16*v
         raw=desired/used;U=np.clip(raw,0,28);a=alpha if t>=3 else 1.;F=force if t>=3 else 0.;T=a*U

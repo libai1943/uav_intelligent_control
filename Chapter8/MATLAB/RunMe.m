@@ -24,7 +24,8 @@ for k=0:round(tf/dt)
   if res>1.6,count=count+1;else,count=0;end
   if count>=12&&~alarm,alarm=true;td=t;end
  end
- enabled=strcmp(kind,'active')&&alarm&&t>=td+delay-1e-12;used=1;if enabled,used=ahat;end
+ estimate_valid=k>0&&fu>=5&&isfinite(fy)&&isfinite(fu);
+ enabled=strcmp(kind,'active')&&alarm&&estimate_valid&&t>=td+delay-1e-12;used=1;if enabled,used=ahat;end
  desired=1.6*9.81+40*(5-h)-16*v;raw=desired/used;U=max(0,min(28,raw));a=1;F=0;if t>=3,a=alpha;F=force;end;T=a*U;
  n=n+1;d(n,:)=[t h v 5-h U T a ahat res double(alarm) double(enabled) raw];if k==round(tf/dt),break,end
  an=(T-1.6*9.81+F)/1.6;newh=h+dt*v;newv=v+dt*an;
