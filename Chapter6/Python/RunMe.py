@@ -104,6 +104,8 @@ def main():
     plot_results(results['feedback'],results['learning'])
     print(json.dumps(summary,ensure_ascii=False,indent=2))
     print(f'Results: {OUT}')
+    from TrainingModes import main as training_modes
+    training_modes(OUT/'training_modes')
 
 
 if __name__ == '__main__':

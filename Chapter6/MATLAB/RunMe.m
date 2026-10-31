@@ -30,6 +30,7 @@ lg.Layout.Tile='north'; lg.Box='off';
 exportgraphics(fig,fullfile(out,'learning_control.pdf'),'ContentType','vector');
 exportgraphics(fig,fullfile(out,'learning_control.png'),'Resolution',180); close(fig);
 disp(summary); fprintf('Results: %s\n',out);
+addpath(root); TrainingModes(fullfile(out,'training_modes')); 
 
 function [value, gradient] = network(theta, feature)
 hidden=tanh(theta(1:2)*feature+theta(3:4));

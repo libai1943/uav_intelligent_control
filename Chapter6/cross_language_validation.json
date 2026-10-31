@@ -9,5 +9,42 @@
     "columns": 14,
     "max_abs_difference": 5.1514348342607263e-14
   },
+  "training_modes": {
+    "training_samples": {
+      "rows": 1000,
+      "columns": 3,
+      "max_abs_difference": 5.10702591327572e-15
+    },
+    "single_parameters": {
+      "rows": 1501,
+      "columns": 2,
+      "max_abs_difference": 6.217248937900877e-15
+    },
+    "mini_parameters": {
+      "rows": 1501,
+      "columns": 2,
+      "max_abs_difference": 5.773159728050814e-15
+    },
+    "full_parameters": {
+      "rows": 1501,
+      "columns": 2,
+      "max_abs_difference": 5.773159728050814e-15
+    },
+    "single_loss": {
+      "rows": 1501,
+      "columns": 3,
+      "max_abs_difference": 4.163336342344337e-16
+    },
+    "mini_loss": {
+      "rows": 1501,
+      "columns": 3,
+      "max_abs_difference": 4.85722573273506e-16
+    },
+    "full_loss": {
+      "rows": 1501,
+      "columns": 3,
+      "max_abs_difference": 3.885780586188048e-16
+    }
+  },
   "passed": true
 }

@@ -1,0 +1,47 @@
+{
+  "samples": 1000,
+  "updates": 1500,
+  "learning_rate": 0.3,
+  "initial_weights": [
+    1.0,
+    1.2
+  ],
+  "noise_bound": 0.2,
+  "gradient_max_abs_errors": [
+    3.301992013149402e-11,
+    5.128686364486157e-11,
+    5.1876281048635065e-12
+  ],
+  "modes": {
+    "single": {
+      "batch_size": 1,
+      "samples_used": 1500,
+      "initial_loss": 0.22033557712171234,
+      "final_loss": 0.0071380287229132,
+      "final_weights": [
+        2.3539606717007873,
+        1.6549015373898095
+      ]
+    },
+    "mini": {
+      "batch_size": 10,
+      "samples_used": 15000,
+      "initial_loss": 0.22033557712171234,
+      "final_loss": 0.006484665585822457,
+      "final_weights": [
+        2.371347495008792,
+        1.6040610435756115
+      ]
+    },
+    "full": {
+      "batch_size": 1000,
+      "samples_used": 1500000,
+      "initial_loss": 0.22033557712171234,
+      "final_loss": 0.006484530638591385,
+      "final_weights": [
+        2.373746922489044,
+        1.6033190232982166
+      ]
+    }
+  }
+}
