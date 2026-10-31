@@ -1,18 +1,19 @@
 {
-  "off": {
-    "final_error_m": 0.22999999999998755,
-    "peak_error_m": 0.22999999999998755,
-    "end_time_s": 100.0
+  "feedback": {
+    "final_error": 0.16333294500168627,
+    "final_neural": 0.0,
+    "final_feedback": 0.9800002963671562,
+    "peak_abs_error": 0.16333294500168627,
+    "min_thrust": 14.700000000000001,
+    "max_thrust": 15.693936456436123
   },
-  "frozen": {
-    "final_error_m": 0.06666666666664955,
-    "peak_error_m": 0.07905275600556072,
-    "end_time_s": 100.0
+  "learning": {
+    "final_error": 1.4703671050941836e-05,
+    "final_neural": 0.9799866362142329,
+    "final_feedback": 1.2351916610083764e-05,
+    "peak_abs_error": 0.07905275600556072,
+    "min_thrust": 14.700000000000001,
+    "max_thrust": 15.852409738953948
   },
-  "online": {
-    "final_error_m": 1.7319479184152442e-14,
-    "peak_error_m": 0.07905275600556072,
-    "end_time_s": 100.0
-  },
-  "checks": "steady balances, frozen weights and learned compensation passed"
+  "checks_passed": true
 }

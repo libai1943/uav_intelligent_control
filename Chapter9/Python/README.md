@@ -10,6 +10,7 @@ Windows双击RunMe.bat；macOS/Linux运行bash RunMe.sh。已安装依赖时运�
 python plot_results.py ../reference_results/python_book
 ```
 
-该命令只由CSV重建图与表，不重新训练。完整包中加`--sync`可同步到LaTeX；代码分包没有LaTeX时不要加该参数。
+该命令只由CSV重建图与表，不重新训练。结果由CSV重建，不需要教材LaTeX源文件。
 
 保留上级validation目录，入口依赖其中的验证资料组织。修改参数后不要把quick结果与书中500批、3种子的统计直接比较。
+
